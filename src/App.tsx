@@ -1,8 +1,15 @@
+import { useEffect, useRef, useState } from 'react';
 import { CITY, EVENTS, MEETUP_URL, type ClubEvent } from './config.ts';
 
-function JoinButton({ label = 'Join us on Meetup' }: { label?: string }) {
+function JoinButton({
+  label = 'Join us on Meetup',
+  onClick,
+}: {
+  label?: string;
+  onClick?: () => void;
+}) {
   return (
-    <a className="btn" href={MEETUP_URL} target="_blank" rel="noopener noreferrer">
+    <a className="btn" href={MEETUP_URL} target="_blank" rel="noopener noreferrer" onClick={onClick}>
       {label}
     </a>
   );
@@ -33,17 +40,59 @@ function EventCard({ event }: { event: ClubEvent }) {
 }
 
 export default function App() {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const navRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    if (!menuOpen) return;
+
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setMenuOpen(false);
+    };
+    const onPointer = (event: PointerEvent) => {
+      if (!navRef.current?.contains(event.target as Node)) setMenuOpen(false);
+    };
+    const onResize = () => {
+      if (window.matchMedia('(min-width: 480px)').matches) setMenuOpen(false);
+    };
+
+    document.addEventListener('keydown', onKey);
+    document.addEventListener('pointerdown', onPointer);
+    window.addEventListener('resize', onResize);
+    return () => {
+      document.removeEventListener('keydown', onKey);
+      document.removeEventListener('pointerdown', onPointer);
+      window.removeEventListener('resize', onResize);
+    };
+  }, [menuOpen]);
+
+  const closeMenu = () => setMenuOpen(false);
+
   return (
     <>
-      <header className="nav">
-        <a className="nav__brand script" href="#top">
+      <header className={menuOpen ? 'nav nav--open' : 'nav'} ref={navRef}>
+        <a className="nav__brand script" href="#top" onClick={closeMenu}>
           Social Club
         </a>
-        <nav className="nav__links">
-          <a href="#events">Events</a>
-          <a href="#about">About</a>
-          <JoinButton label="Join" />
+        <nav id="site-nav" className={menuOpen ? 'nav__links is-open' : 'nav__links'}>
+          <a href="#events" onClick={closeMenu}>
+            Events
+          </a>
+          <a href="#about" onClick={closeMenu}>
+            About
+          </a>
         </nav>
+        <JoinButton label="Join" onClick={closeMenu} />
+        <button
+          type="button"
+          className="nav__toggle"
+          aria-expanded={menuOpen}
+          aria-controls="site-nav"
+          onClick={() => setMenuOpen((open) => !open)}
+        >
+          <span className="sr-only">{menuOpen ? 'Close menu' : 'Open menu'}</span>
+          <span className="nav__burger" aria-hidden="true" />
+        </button>
       </header>
 
       <main id="top">
