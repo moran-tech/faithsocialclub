@@ -48,11 +48,11 @@ function subscribeEndpoint(value: string | undefined): string | null {
   }
 }
 
-function messageFromBody(value: unknown): string | null {
+function errorFromBody(value: unknown): string | null {
   if (!value || typeof value !== 'object') return null;
-  const message = (value as { message?: unknown }).message;
-  if (typeof message !== 'string') return null;
-  const trimmed = message.trim();
+  const error = (value as { error?: unknown }).error;
+  if (typeof error !== 'string') return null;
+  const trimmed = error.trim();
   return trimmed ? trimmed.slice(0, 300) : null;
 }
 
@@ -137,24 +137,25 @@ export function NewsletterForm() {
         credentials: 'omit',
         body: JSON.stringify({
           email: normalizedEmail,
-          firstName: normalizedName.name,
+          ...(normalizedName.name ? { firstName: normalizedName.name } : {}),
           consent: true,
-          company,
+          company: company.trim(),
         }),
         signal: AbortSignal.timeout(45_000),
       });
 
-      if (response.status === 429) {
-        setPhase('error');
-        setMessage(messages.rateLimit);
-        return;
-      }
-
       const payload: unknown = await response.json().catch(() => null);
+      const serverError = errorFromBody(payload);
 
       if (response.status === 400) {
         setPhase('error');
-        setMessage(messageFromBody(payload) ?? messages.validation);
+        setMessage(serverError ?? messages.validation);
+        return;
+      }
+
+      if (response.status === 429) {
+        setPhase('error');
+        setMessage(serverError ?? messages.rateLimit);
         return;
       }
 
