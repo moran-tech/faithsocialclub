@@ -1,3 +1,4 @@
+import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   CITY,
   COMING_SOON,
@@ -7,9 +8,15 @@ import {
   type ComingSoonEvent,
 } from './config.ts';
 
-function JoinButton({ label = 'Join us on Meetup' }: { label?: string }) {
+function JoinButton({
+  label = 'Join us on Meetup',
+  onClick,
+}: {
+  label?: string;
+  onClick?: () => void;
+}) {
   return (
-    <a className="btn" href={MEETUP_URL} target="_blank" rel="noopener noreferrer">
+    <a className="btn" href={MEETUP_URL} target="_blank" rel="noopener noreferrer" onClick={onClick}>
       {label}
     </a>
   );
@@ -73,19 +80,101 @@ function ComingSoonCard({ event }: { event: ComingSoonEvent }) {
   );
 }
 
+const PHONE_NAV_QUERY = '(max-width: 479px)';
+
 export default function App() {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [isPhoneNav, setIsPhoneNav] = useState(() => window.matchMedia(PHONE_NAV_QUERY).matches);
+  const navRef = useRef<HTMLElement>(null);
+  const menuRef = useRef<HTMLElement>(null);
+  const toggleRef = useRef<HTMLButtonElement>(null);
+
+  const closeMenu = useCallback((restore: 'now' | 'after' = 'now') => {
+    const restoreFocus = menuRef.current?.contains(document.activeElement) ?? false;
+    setMenuOpen(false);
+    if (!restoreFocus) return;
+
+    const focusToggle = () => toggleRef.current?.focus({ preventScroll: true });
+    if (restore === 'now') {
+      focusToggle();
+      return;
+    }
+
+    // Wait until link activation or the outside click has moved focus, then
+    // send it back to the button if it would otherwise fall on the page.
+    setTimeout(() => {
+      const active = document.activeElement;
+      if (active === document.body || active === null || menuRef.current?.contains(active)) {
+        focusToggle();
+      }
+    }, 0);
+  }, []);
+
+  useEffect(() => {
+    const media = window.matchMedia(PHONE_NAV_QUERY);
+    const onChange = () => {
+      setIsPhoneNav(media.matches);
+      if (!media.matches) setMenuOpen(false);
+    };
+    media.addEventListener('change', onChange);
+    return () => media.removeEventListener('change', onChange);
+  }, []);
+
+  useEffect(() => {
+    if (!menuOpen) return;
+
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') closeMenu('now');
+    };
+    const onPointer = (event: PointerEvent) => {
+      if (!navRef.current?.contains(event.target as Node)) closeMenu('after');
+    };
+
+    document.addEventListener('keydown', onKey);
+    document.addEventListener('pointerdown', onPointer);
+    return () => {
+      document.removeEventListener('keydown', onKey);
+      document.removeEventListener('pointerdown', onPointer);
+    };
+  }, [menuOpen, closeMenu]);
+
+  const menu = (
+    <nav id="site-nav" ref={menuRef} className={menuOpen ? 'nav__links is-open' : 'nav__links'}>
+      <a href="#events" onClick={() => closeMenu('after')}>
+        Events
+      </a>
+      {COMING_SOON.length > 0 && (
+        <a href="#coming-soon" onClick={() => closeMenu('after')}>
+          Coming soon
+        </a>
+      )}
+      <a href="#about" onClick={() => closeMenu('after')}>
+        About
+      </a>
+    </nav>
+  );
+
   return (
     <>
-      <header className="nav">
-        <a className="nav__brand script" href="#top">
+      <header className={menuOpen ? 'nav nav--open' : 'nav'} ref={navRef}>
+        <a className="nav__brand script" href="#top" onClick={() => closeMenu()}>
           Social Club
         </a>
-        <nav className="nav__links">
-          <a href="#events">Events</a>
-          {COMING_SOON.length > 0 && <a href="#coming-soon">Coming soon</a>}
-          <a href="#about">About</a>
-          <JoinButton label="Join" />
-        </nav>
+        {/* Phone tab order is Join, menu button, then these links. Wider screens keep the links in the bar, before Join. */}
+        {isPhoneNav ? null : menu}
+        <JoinButton label="Join" onClick={() => closeMenu()} />
+        <button
+          ref={toggleRef}
+          type="button"
+          className="nav__toggle"
+          aria-expanded={menuOpen}
+          aria-controls="site-nav"
+          onClick={() => setMenuOpen((open) => !open)}
+        >
+          <span className="sr-only">{menuOpen ? 'Close menu' : 'Open menu'}</span>
+          <span className="nav__burger" aria-hidden="true" />
+        </button>
+        {isPhoneNav ? menu : null}
       </header>
 
       <main id="top">
