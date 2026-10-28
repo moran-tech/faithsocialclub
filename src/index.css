@@ -658,3 +658,154 @@ main > section {
     grid-template-columns: 1fr;
   }
 }
+
+/* Newsletter */
+.newsletter__card {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: 28px 48px;
+  align-items: center;
+  background: var(--paper);
+  border-radius: var(--radius);
+  padding: 36px 40px;
+  border-top: 8px solid var(--peach);
+  box-shadow: 0 10px 30px rgba(31, 59, 45, 0.08);
+}
+
+.newsletter h2 {
+  font-size: clamp(40px, 5vw, 58px);
+  line-height: 1;
+  margin: 4px 0 12px;
+}
+
+.newsletter__intro p:last-child {
+  margin: 0;
+  color: var(--muted);
+  font-size: 18px;
+}
+
+.newsletter__form,
+.newsletter__result {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.newsletter .field > label:not(.consent) {
+  display: block;
+  font-weight: 800;
+  color: var(--green);
+  margin-bottom: 6px;
+}
+
+.newsletter .optional {
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.newsletter input[type='email'],
+.newsletter input[type='text'] {
+  width: 100%;
+  font: inherit;
+  font-size: 16px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 2px solid rgba(31, 59, 45, 0.18);
+  background: #fff;
+  color: var(--ink);
+}
+
+.newsletter input[aria-invalid='true'] {
+  border-color: #8a3d4a;
+}
+
+.newsletter .consent {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 0;
+}
+
+.newsletter .consent input {
+  width: 1.15rem;
+  height: 1.15rem;
+  margin-top: 0.25rem;
+  accent-color: var(--green);
+  flex: none;
+}
+
+.newsletter .field-error,
+.newsletter .form-error {
+  margin: 8px 0 0;
+  color: #8a3d4a;
+  font-weight: 800;
+  font-size: 15px;
+}
+
+.newsletter .form-error {
+  margin: 0;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: #fdecef;
+}
+
+.newsletter button.btn {
+  width: 100%;
+  font-family: inherit;
+  font-size: 17px;
+  cursor: pointer;
+}
+
+.newsletter button.btn:disabled {
+  opacity: 0.7;
+  cursor: wait;
+  transform: none;
+}
+
+.newsletter button.btn:disabled:hover {
+  transform: none;
+  background: var(--green);
+}
+
+.newsletter button.btn--ghost:disabled:hover {
+  background: transparent;
+}
+
+.newsletter__result-title {
+  font-size: clamp(36px, 4vw, 52px);
+  line-height: 1.05;
+  overflow-wrap: anywhere;
+}
+
+.newsletter__result-title:focus {
+  outline: 3px solid var(--green);
+  outline-offset: 3px;
+}
+
+.newsletter__result p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.newsletter__signoff {
+  margin: 4px 0 8px;
+  font-size: 32px;
+  color: var(--green);
+}
+
+.hp-field {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+@media (max-width: 860px) {
+  .newsletter__card {
+    grid-template-columns: 1fr;
+    padding: 28px 20px;
+  }
+}

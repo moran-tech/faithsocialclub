@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { NewsletterForm } from './NewsletterForm.tsx';
 import {
   CITY,
   COMING_SOON,
@@ -151,6 +152,9 @@ export default function App() {
       <a href="#about" onClick={() => closeMenu('after')}>
         About
       </a>
+      <a href="#newsletter" onClick={() => closeMenu('after')}>
+        Newsletter
+      </a>
     </nav>
   );
 
@@ -258,6 +262,8 @@ export default function App() {
           <JoinButton />
           <p className="signoff script">See you there! — Faith M</p>
         </section>
+
+        <NewsletterForm />
       </main>
 
       <footer className="footer">
