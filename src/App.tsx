@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { CITY, EVENTS, MEETUP_URL, type ClubEvent } from './config.ts';
 
 function JoinButton({
@@ -39,51 +39,86 @@ function EventCard({ event }: { event: ClubEvent }) {
   );
 }
 
+const PHONE_NAV_QUERY = '(max-width: 479px)';
+
 export default function App() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [isPhoneNav, setIsPhoneNav] = useState(() => window.matchMedia(PHONE_NAV_QUERY).matches);
   const navRef = useRef<HTMLElement>(null);
+  const menuRef = useRef<HTMLElement>(null);
+  const toggleRef = useRef<HTMLButtonElement>(null);
+
+  const closeMenu = useCallback((restore: 'now' | 'after' = 'now') => {
+    const restoreFocus = menuRef.current?.contains(document.activeElement) ?? false;
+    setMenuOpen(false);
+    if (!restoreFocus) return;
+
+    const focusToggle = () => toggleRef.current?.focus({ preventScroll: true });
+    if (restore === 'now') {
+      focusToggle();
+      return;
+    }
+
+    // Wait until link activation or the outside click has moved focus, then
+    // send it back to the button if it would otherwise fall on the page.
+    setTimeout(() => {
+      const active = document.activeElement;
+      if (active === document.body || active === null || menuRef.current?.contains(active)) {
+        focusToggle();
+      }
+    }, 0);
+  }, []);
+
+  useEffect(() => {
+    const media = window.matchMedia(PHONE_NAV_QUERY);
+    const onChange = () => {
+      setIsPhoneNav(media.matches);
+      if (!media.matches) setMenuOpen(false);
+    };
+    media.addEventListener('change', onChange);
+    return () => media.removeEventListener('change', onChange);
+  }, []);
 
   useEffect(() => {
     if (!menuOpen) return;
 
     const onKey = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') setMenuOpen(false);
+      if (event.key === 'Escape') closeMenu('now');
     };
     const onPointer = (event: PointerEvent) => {
-      if (!navRef.current?.contains(event.target as Node)) setMenuOpen(false);
-    };
-    const onResize = () => {
-      if (window.matchMedia('(min-width: 480px)').matches) setMenuOpen(false);
+      if (!navRef.current?.contains(event.target as Node)) closeMenu('after');
     };
 
     document.addEventListener('keydown', onKey);
     document.addEventListener('pointerdown', onPointer);
-    window.addEventListener('resize', onResize);
     return () => {
       document.removeEventListener('keydown', onKey);
       document.removeEventListener('pointerdown', onPointer);
-      window.removeEventListener('resize', onResize);
     };
-  }, [menuOpen]);
+  }, [menuOpen, closeMenu]);
 
-  const closeMenu = () => setMenuOpen(false);
+  const menu = (
+    <nav id="site-nav" ref={menuRef} className={menuOpen ? 'nav__links is-open' : 'nav__links'}>
+      <a href="#events" onClick={() => closeMenu('after')}>
+        Events
+      </a>
+      <a href="#about" onClick={() => closeMenu('after')}>
+        About
+      </a>
+    </nav>
+  );
 
   return (
     <>
       <header className={menuOpen ? 'nav nav--open' : 'nav'} ref={navRef}>
-        <a className="nav__brand script" href="#top" onClick={closeMenu}>
+        <a className="nav__brand script" href="#top" onClick={() => closeMenu()}>
           Social Club
         </a>
-        <nav id="site-nav" className={menuOpen ? 'nav__links is-open' : 'nav__links'}>
-          <a href="#events" onClick={closeMenu}>
-            Events
-          </a>
-          <a href="#about" onClick={closeMenu}>
-            About
-          </a>
-        </nav>
-        <JoinButton label="Join" onClick={closeMenu} />
+        {/* Phone tab order is Join, menu button, then these links. Wider screens keep the links in the bar, before Join. */}
+        {isPhoneNav ? null : menu}
+        <JoinButton label="Join" onClick={() => closeMenu()} />
         <button
+          ref={toggleRef}
           type="button"
           className="nav__toggle"
           aria-expanded={menuOpen}
@@ -93,6 +128,7 @@ export default function App() {
           <span className="sr-only">{menuOpen ? 'Close menu' : 'Open menu'}</span>
           <span className="nav__burger" aria-hidden="true" />
         </button>
+        {isPhoneNav ? menu : null}
       </header>
 
       <main id="top">
