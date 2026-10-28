@@ -269,6 +269,7 @@ main > section {
 
 /* Week */
 .week h2,
+.soon h2,
 .about h2,
 .cta h2 {
   font-size: clamp(36px, 5vw, 56px);
@@ -354,10 +355,35 @@ main > section {
   border-top: 8px solid var(--pink);
 }
 
+.event--peach {
+  border-top: 8px solid var(--peach);
+}
+
 .event__image {
   width: 100%;
   aspect-ratio: 16 / 10;
   object-fit: cover;
+}
+
+/* 16fr/9fr matches a 4:3 photo beside a 3:4 photo, so both show in full. */
+.event__photos {
+  display: grid;
+  grid-template-columns: 16fr 9fr;
+  gap: 3px;
+}
+
+.event__photo {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+.event__photo--landscape {
+  aspect-ratio: 4 / 3;
+}
+
+.event__photo--portrait {
+  aspect-ratio: 3 / 4;
 }
 
 .event__body {
@@ -392,6 +418,20 @@ main > section {
 
 .event--sage .pill {
   background: var(--sage);
+}
+
+.event--peach .pill {
+  background: var(--peach);
+}
+
+.event--soon .pill {
+  margin-bottom: 0;
+}
+
+/* One upcoming event sits centered at the same width as the other cards. */
+.soon .events:has(> :only-child) {
+  grid-template-columns: minmax(0, 524px);
+  justify-content: center;
 }
 
 .event__points {
@@ -510,7 +550,8 @@ main > section {
 }
 
 @media (max-width: 700px) {
-  .events {
+  .events,
+  .soon .events:has(> :only-child) {
     grid-template-columns: 1fr;
   }
 }
@@ -610,5 +651,11 @@ main > section {
   .nav__burger::before,
   .nav__burger::after {
     transition: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .event__photos {
+    grid-template-columns: 1fr;
   }
 }

@@ -1,5 +1,12 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { CITY, EVENTS, MEETUP_URL, type ClubEvent } from './config.ts';
+import {
+  CITY,
+  COMING_SOON,
+  EVENTS,
+  MEETUP_URL,
+  type ClubEvent,
+  type ComingSoonEvent,
+} from './config.ts';
 
 function JoinButton({
   label = 'Join us on Meetup',
@@ -15,12 +22,34 @@ function JoinButton({
   );
 }
 
+function EventMedia({ event }: { event: ClubEvent }) {
+  if (event.photos && event.photos.length > 0) {
+    return (
+      <div className="event__photos">
+        {event.photos.map((photo) => (
+          <img
+            key={photo.src}
+            className={`event__photo event__photo--${photo.orientation}`}
+            src={photo.src}
+            alt={photo.alt}
+            width={photo.width}
+            height={photo.height}
+            loading="lazy"
+          />
+        ))}
+      </div>
+    );
+  }
+
+  if (!event.image) return null;
+
+  return <img className="event__image" src={event.image} alt={`${event.title} photo`} loading="lazy" />;
+}
+
 function EventCard({ event }: { event: ClubEvent }) {
   return (
     <article className={`event event--${event.accent}`} id={event.id}>
-      {event.image && (
-        <img className="event__image" src={event.image} alt={`${event.title} photo`} loading="lazy" />
-      )}
+      <EventMedia event={event} />
       <div className="event__body">
         <p className="event__when">
           Every {event.day} · {event.time}
@@ -34,6 +63,18 @@ function EventCard({ event }: { event: ClubEvent }) {
           ))}
         </ul>
         <JoinButton label={`RSVP for ${event.day}`} />
+      </div>
+    </article>
+  );
+}
+
+function ComingSoonCard({ event }: { event: ComingSoonEvent }) {
+  return (
+    <article className={`event event--${event.accent} event--soon`} id={event.id}>
+      <div className="event__body">
+        <p className="event__when">Every {event.day}</p>
+        <h3 className="script event__title">{event.title}</h3>
+        <p className="pill">Coming soon</p>
       </div>
     </article>
   );
@@ -102,6 +143,11 @@ export default function App() {
       <a href="#events" onClick={() => closeMenu('after')}>
         Events
       </a>
+      {COMING_SOON.length > 0 && (
+        <a href="#coming-soon" onClick={() => closeMenu('after')}>
+          Coming soon
+        </a>
+      )}
       <a href="#about" onClick={() => closeMenu('after')}>
         About
       </a>
@@ -173,6 +219,17 @@ export default function App() {
             ))}
           </div>
         </section>
+
+        {COMING_SOON.length > 0 && (
+          <section className="soon" id="coming-soon">
+            <h2 className="script">Coming soon</h2>
+            <div className="events">
+              {COMING_SOON.map((event) => (
+                <ComingSoonCard key={event.id} event={event} />
+              ))}
+            </div>
+          </section>
+        )}
 
         <section className="about" id="about">
           <h2 className="script">Same people, brighter days</h2>
