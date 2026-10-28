@@ -72,7 +72,7 @@ function ComingSoonCard({ event }: { event: ComingSoonEvent }) {
   return (
     <article className={`event event--${event.accent} event--soon`} id={event.id}>
       <div className="event__body">
-        <p className="event__when">Every {event.day}</p>
+        <p className="event__when">On a {event.day}</p>
         <h3 className="script event__title">{event.title}</h3>
         <p className="pill">Coming soon</p>
       </div>
@@ -235,7 +235,7 @@ export default function App() {
           <h2 className="script">Same people, brighter days</h2>
           <div className="about__grid">
             <div className="about__item">
-              <span className="dot dot--green" />
+              <span className="dot dot--spacer" aria-hidden="true" />
               <h3>Come solo</h3>
               <p>Most people do. You will leave knowing a few new names.</p>
             </div>
