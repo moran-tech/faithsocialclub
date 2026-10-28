@@ -9,7 +9,7 @@ Weekly events:
 
 Coming soon:
 
-- **Sports Watch Parties**, every Saturday
+- **Sports Watch Parties**, On a Saturday
 
 RSVPs go through Meetup. Live events are listed in `EVENTS`. Announced events that don't have a time or place yet go in `COMING_SOON` — add another object there and it shows up in the Coming soon section.
 
@@ -23,7 +23,7 @@ npm run build      # type-check + production build into dist/
 
 ## Editing content
 
-Event details, times, and the Meetup link live in `src/config.ts`. Set `MEETUP_URL` to the real Meetup group URL before launch.
+Event details, times, and the Meetup link live in `src/config.ts`.
 
 Images live in `public/images/` (resized from the originals in `../social club/`). Coworking photos are the `photos` list on the Monday event.
 

@@ -1,5 +1,5 @@
-// Replace with the real Meetup group URL before launch.
-export const MEETUP_URL = 'https://www.meetup.com/';
+export const MEETUP_URL =
+  'https://www.meetup.com/coworking-surrey-hosted-by-morantech/?eventOrigin=home_groups_you_organize';
 
 export const CITY = 'Surrey, BC';
 
