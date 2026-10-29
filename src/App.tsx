@@ -201,8 +201,10 @@ export default function App() {
           </div>
           <img
             className="hero__image"
-            src="/images/hero.jpg"
-            alt="Illustration of friends coworking, painting, and sharing food at a café table"
+            src="/images/hero.webp"
+            width={1920}
+            height={1080}
+            alt="Social Club for Professionals in Surrey, BC: board games, coworking, real connections"
           />
         </section>
 
