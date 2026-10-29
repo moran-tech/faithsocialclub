@@ -1,5 +1,4 @@
 import { useEffect, useId, useRef, useState, type FormEvent } from 'react';
-import { CITY } from './config.ts';
 
 type Phase = 'idle' | 'invalid' | 'loading' | 'subscribed' | 'already_subscribed' | 'error';
 type Field = 'email' | 'firstName' | 'consent' | null;
@@ -8,7 +7,7 @@ const messages = {
   invalidEmail: 'Enter an email address like you@example.com.',
   invalidName: 'First name should be 80 characters or fewer.',
   consent: 'Check the box so I know it’s okay to email you.',
-  subscribed: 'I’ll write when the next gathering is set.',
+  subscribed: 'I’ll write each week about upcoming events.',
   already: "You're already on the list",
   error: 'Something went wrong and I couldn’t add you. Please try again in a minute.',
   rateLimit: 'Too many tries, please wait',
@@ -208,10 +207,7 @@ export function NewsletterForm() {
           <h2 id="newsletter-heading" className="script">
             A note before we meet
           </h2>
-          <p>
-            Monday coworking, Thursday board games, and the occasional extra plan. A short email from Faith
-            in {CITY}. No weekly blast.
-          </p>
+          <p>Join to know more about our upcoming events.</p>
         </div>
 
         {done ? (
