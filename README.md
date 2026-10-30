@@ -21,6 +21,21 @@ npm run dev        # http://localhost:5176
 npm run build      # type-check + production build into dist/
 ```
 
+## Link-in-bio page
+
+`https://f8social.club/links` is a separate, mobile-first page for the Instagram bio.
+Its HTML entry is `links/index.html`, with React and isolated styles in `src/links/`.
+It reads `EVENTS` and `COMING_SOON` from `src/config.ts` and reuses `NewsletterForm`,
+including the same `VITE_SUBSCRIBE_API_URL` build setting as the homepage.
+
+Vite's multi-page inputs build both `dist/index.html` and `dist/links/index.html`.
+With Render's publish directory set to `dist`, `/links` resolves to the directory's
+`index.html` (also available as `/links/` or `/links/index.html`), including direct
+visits and refreshes. No client-side router or SPA fallback rewrite is needed.
+Keep both HTML inputs in `vite.config.ts` when changing the build.
+
+Use Node 20.19+ or 22.12+ for the current Vite version.
+
 ## Newsletter
 
 The form posts to the f8social route on fireplace-waitlist. On the static site, set this before the production build and redeploy:
