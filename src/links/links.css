@@ -178,6 +178,20 @@ h1, h2, h3, p { margin: 0; }
 .event-link__photo { position: relative; height: clamp(132px, 37vw, 196px); overflow: hidden; border-bottom: 2px solid var(--green); background: var(--paper); }
 .event-link__photo img { width: 100%; height: 100%; object-fit: cover; object-position: center 44%; }
 .event-link--pink .event-link__photo img { object-position: center 53%; }
+.event-link__illustration { display: block; width: 100%; height: 100%; }
+.event-link__sticker {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  border: 1.5px solid var(--green);
+  border-radius: 5px;
+  padding: 7px 11px;
+  background: var(--paper);
+  box-shadow: 2px 3px 0 var(--green);
+  font-size: 12px;
+  font-weight: 800;
+  rotate: -5deg;
+}
 .event-link__day {
   position: absolute;
   top: 12px;
@@ -194,6 +208,7 @@ h1, h2, h3, p { margin: 0; }
 .event-link__body { position: relative; padding: 19px 20px 16px; }
 .event-link h3 { font-family: var(--display); font-size: clamp(26px, 7.2vw, 34px); font-weight: 800; letter-spacing: -0.045em; line-height: 1.1; overflow-wrap: anywhere; }
 .event-link__tagline { margin-top: 7px; font-size: 13px; line-height: 1.5; }
+.event-link__location { margin-top: 10px; font-size: 12px; font-weight: 800; line-height: 1.5; }
 .event-link__bottom { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 17px; }
 .event-link__time { display: block; font-size: 12px; line-height: 1.5; }
 .event-link__cta { display: block; font-size: 13px; line-height: 1.5; font-weight: 800; }
@@ -208,11 +223,6 @@ h1, h2, h3, p { margin: 0; }
   font-size: 25px;
   line-height: 1;
 }
-.event-link__soon-label { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 24px; }
-.soon-sticker { border: 1.5px solid var(--green); background: var(--paper); border-radius: 5px; padding: 4px 8px; font-size: 11px; font-weight: 800; rotate: 4deg; }
-.event-link--soon h3 { max-width: 80%; }
-.event-link__spark { position: absolute; width: 54px; height: 54px; right: 18px; top: 78px; rotate: 12deg; }
-.event-link--soon .event-link__bottom { margin-top: 22px; }
 
 .links-more { display: grid; gap: 18px; margin-top: 30px; }
 .extra-link { display: flex; align-items: center; gap: 13px; padding: 20px 16px; }

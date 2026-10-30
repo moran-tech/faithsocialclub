@@ -25,8 +25,10 @@ npm run build      # type-check + production build into dist/
 
 `https://f8social.club/links` is a separate, mobile-first page for the Instagram bio.
 Its HTML entry is `links/index.html`, with React and isolated styles in `src/links/`.
-It reads `EVENTS` and `COMING_SOON` from `src/config.ts` and reuses `NewsletterForm`,
-including the same `VITE_SUBSCRIBE_API_URL` build setting as the homepage.
+It reads weekly `EVENTS` from `src/config.ts` and adds one-off events in
+`src/links/events.ts`, without changing the homepage's event copy. It reuses
+`NewsletterForm`, including the same `VITE_SUBSCRIBE_API_URL` build setting as the
+homepage.
 
 Vite's multi-page inputs build both `dist/index.html` and `dist/links/index.html`.
 With Render's publish directory set to `dist`, `/links` resolves to the directory's

@@ -1,13 +1,8 @@
 import { useState, type CSSProperties } from 'react';
 import { NewsletterForm } from '../NewsletterForm.tsx';
-import {
-  CITY,
-  COMING_SOON,
-  EVENTS,
-  MEETUP_URL,
-  type ClubEvent,
-  type ComingSoonEvent,
-} from '../config.ts';
+import { CITY, MEETUP_URL } from '../config.ts';
+import { EventArtwork } from './EventArtwork.tsx';
+import { LINKS_EVENTS, type LinksEvent } from './events.ts';
 
 function Spark({ className = '' }: { className?: string }) {
   return (
@@ -32,30 +27,37 @@ function entranceStyle(index: number): CSSProperties {
   return { '--entrance-delay': `${index * 85}ms` } as CSSProperties;
 }
 
-function EventLink({ event, index }: { event: ClubEvent; index: number }) {
+function EventLink({ event, index }: { event: LinksEvent; index: number }) {
   const photo = event.photos?.[0];
   const image = photo?.src ?? event.image;
+  const dayLabel = event.date ?? `Every ${event.day}`;
 
   return (
     <li className="links-reveal" style={entranceStyle(index)}>
-      <a className={`event-link event-link--${event.accent}`} href={MEETUP_URL}>
-        {image && (
+      <a className={`event-link event-link--${event.accent}`} href={event.url ?? MEETUP_URL}>
+        {(image || event.artwork) && (
           <div className="event-link__photo">
-            <img
-              src={image}
-              alt={photo?.alt ?? `Friends playing board games around a café table at ${event.title}`}
-              width={photo?.width ?? 735}
-              height={photo?.height ?? 941}
-              loading="lazy"
-              decoding="async"
-            />
-            <span className="event-link__day">Every {event.day}</span>
+            {event.artwork ? (
+              <EventArtwork theme={event.artwork} />
+            ) : (
+              <img
+                src={image}
+                alt={photo?.alt ?? `Friends playing board games around a café table at ${event.title}`}
+                width={photo?.width ?? 735}
+                height={photo?.height ?? 941}
+                loading="lazy"
+                decoding="async"
+              />
+            )}
+            <span className="event-link__day">{dayLabel}</span>
+            {event.sticker && <span className="event-link__sticker">{event.sticker}</span>}
           </div>
         )}
         <div className="event-link__body">
-          {!image && <p className="links-eyebrow">Every {event.day}</p>}
+          {!image && !event.artwork && <p className="links-eyebrow">{dayLabel}</p>}
           <h3>{event.title}</h3>
           <p className="event-link__tagline">{event.tagline}</p>
+          {event.location && <p className="event-link__location">{event.location}</p>}
           <div className="event-link__bottom">
             <span>
               <span className="event-link__time">{event.time}</span>
@@ -69,30 +71,9 @@ function EventLink({ event, index }: { event: ClubEvent; index: number }) {
   );
 }
 
-function ComingSoonLink({ event, index }: { event: ComingSoonEvent; index: number }) {
-  return (
-    <li className="links-reveal" style={entranceStyle(index)}>
-      <a className={`event-link event-link--${event.accent} event-link--soon`} href={MEETUP_URL}>
-        <div className="event-link__body">
-          <div className="event-link__soon-label">
-            <p className="links-eyebrow">On a {event.day}</p>
-            <span className="soon-sticker">Coming soon</span>
-          </div>
-          <Spark className="event-link__spark" />
-          <h3>{event.title}</h3>
-          <div className="event-link__bottom">
-            <span className="event-link__cta">Keep an eye on Meetup</span>
-            <Arrow />
-          </div>
-        </div>
-      </a>
-    </li>
-  );
-}
-
 export default function LinksPage() {
   const [motionPaused, setMotionPaused] = useState(false);
-  const marqueeItems = [...EVENTS, ...COMING_SOON];
+  const marqueeItems = LINKS_EVENTS;
 
   return (
     <div className={`links-page${motionPaused ? ' links-page--paused' : ''}`}>
@@ -157,8 +138,7 @@ export default function LinksPage() {
                 {marqueeItems.map((event) => (
                   <span className="links-marquee__item" key={event.id}>
                     <Spark />
-                    {event.day} / {event.title}
-                    {COMING_SOON.some((upcoming) => upcoming.id === event.id) && ' (coming soon)'}
+                    {event.date ?? event.day} / {event.title}
                   </span>
                 ))}
               </span>
@@ -173,11 +153,8 @@ export default function LinksPage() {
               <span aria-hidden="true">See you there ↓</span>
             </div>
             <ul className="links-stack">
-              {EVENTS.map((event, index) => (
+              {LINKS_EVENTS.map((event, index) => (
                 <EventLink event={event} index={index} key={event.id} />
-              ))}
-              {COMING_SOON.map((event, index) => (
-                <ComingSoonLink event={event} index={EVENTS.length + index} key={event.id} />
               ))}
             </ul>
           </section>
