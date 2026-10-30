@@ -76,7 +76,7 @@ function EventLink({ event, index }: { event: LinksEvent; index: number }) {
                 alt={photo?.alt ?? `Friends playing board games around a café table at ${event.title}`}
                 width={photo?.width ?? 735}
                 height={photo?.height ?? 941}
-                loading="lazy"
+                loading={index < 2 ? 'eager' : 'lazy'}
                 decoding="async"
               />
             )}
