@@ -2,7 +2,7 @@ import { useState, type CSSProperties } from 'react';
 import { NewsletterForm } from '../NewsletterForm.tsx';
 import { CITY, MEETUP_URL } from '../config.ts';
 import { EventArtwork } from './EventArtwork.tsx';
-import { LINKS_EVENTS, type LinksEvent } from './events.ts';
+import { FEATURED_MIXER, LINKS_EVENTS, type LinksEvent } from './events.ts';
 
 function Spark({ className = '' }: { className?: string }) {
   return (
@@ -25,6 +25,37 @@ function Arrow() {
 
 function entranceStyle(index: number): CSSProperties {
   return { '--entrance-delay': `${index * 85}ms` } as CSSProperties;
+}
+
+function FeaturedMixer() {
+  return (
+    <a className="mixer-feature" href={FEATURED_MIXER.url} aria-labelledby="mixer-heading mixer-cta">
+      <span className="mixer-feature__sparkles" aria-hidden="true">
+        <Spark className="mixer-feature__spark mixer-feature__spark--one" />
+        <Spark className="mixer-feature__spark mixer-feature__spark--two" />
+        <Spark className="mixer-feature__spark mixer-feature__spark--three" />
+      </span>
+      <p className="links-eyebrow">{FEATURED_MIXER.audience}</p>
+      <h1 id="mixer-heading">{FEATURED_MIXER.title}</h1>
+      <p className="mixer-feature__details">
+        {FEATURED_MIXER.date} · {FEATURED_MIXER.time} · {FEATURED_MIXER.location}
+      </p>
+      <ul className="mixer-feature__perks">
+        {FEATURED_MIXER.perks.map((perk) => <li key={perk}>{perk}</li>)}
+      </ul>
+      <div className="mixer-feature__pricing">
+        <span className="mixer-feature__sticker">
+          Early bird <strong>${FEATURED_MIXER.earlyBirdPrice}</strong>
+        </span>
+        <span className="mixer-feature__regular">
+          Regular <s>${FEATURED_MIXER.regularPrice}</s>
+        </span>
+      </div>
+      <span className="mixer-feature__cta" id="mixer-cta">
+        Grab your early bird ticket →
+      </span>
+    </a>
+  );
 }
 
 function EventLink({ event, index }: { event: LinksEvent; index: number }) {
@@ -100,12 +131,15 @@ export default function LinksPage() {
             <button
               className="motion-toggle"
               type="button"
+              aria-pressed={motionPaused}
               onClick={() => setMotionPaused((paused) => !paused)}
             >
               <span aria-hidden="true">{motionPaused ? '▷' : 'Ⅱ'}</span>
               {motionPaused ? 'Play motion' : 'Pause motion'}
             </button>
           </div>
+
+          <FeaturedMixer />
 
           <div className="links-banner">
             <img
@@ -122,9 +156,9 @@ export default function LinksPage() {
 
           <div className="links-intro">
             <p className="links-eyebrow">{CITY} · Good people, every week</p>
-            <h1>
+            <h2>
               Make friends<br /><span>outside work.</span>
-            </h1>
+            </h2>
             <p>
               Your next good plan starts here.<br />Come solo, everyone is welcome.
             </p>

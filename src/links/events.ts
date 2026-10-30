@@ -14,6 +14,18 @@ export type LinksEvent = Pick<
 };
 
 // One-off event details stay on /links, separate from the homepage's weekly plans.
+export const FEATURED_MIXER = {
+  title: 'End of Year Mixer',
+  audience: 'For Surrey Professionals',
+  date: 'Sat, Dec 5',
+  time: '6:30–9 PM',
+  location: 'Studio Nazrana, Surrey',
+  url: 'https://www.meetup.com/coworking-surrey-hosted-by-morantech/events/317095315/',
+  perks: ['Live DJ', 'Food & drinks included', 'Event photographer', 'Sponsor giveaways'],
+  earlyBirdPrice: 35,
+  regularPrice: 45,
+};
+
 export const LINKS_EVENTS: LinksEvent[] = [
   ...EVENTS,
   {
@@ -28,18 +40,5 @@ export const LINKS_EVENTS: LinksEvent[] = [
     sticker: 'Only 8 seats',
     artwork: 'soccer',
     accent: 'peach',
-  },
-  {
-    id: 'year-end-mixer',
-    day: 'Saturday',
-    date: 'Sat, Dec 5',
-    time: '6:30 to 9 PM',
-    title: 'End of Year Mixer for Surrey Professionals',
-    tagline: 'Live DJ · Food and drinks included · Photographer · Giveaways',
-    location: 'Studio Nazrana, Surrey',
-    url: 'https://www.meetup.com/coworking-surrey-hosted-by-morantech/events/317095315/',
-    sticker: 'Early bird $35',
-    artwork: 'mixer',
-    accent: 'pink',
   },
 ];
