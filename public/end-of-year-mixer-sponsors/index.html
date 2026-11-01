@@ -384,7 +384,8 @@
       tbody tr:last-child td { border-bottom: 0; }
 
       tr.money td,
-      tr.spots td {
+      tr.spots td,
+      tr.talk td.dur {
         color: var(--green);
         font-weight: 800;
         font-variant-numeric: tabular-nums;
@@ -585,8 +586,7 @@
               <p class="price">$1,000</p>
               <ul>
                 <li>“End of Year Mixer presented by [Your Brand]” on Meetup and Instagram</li>
-                <li>5-minute talk on stage</li>
-                <li>2-minute talk</li>
+                <li>5-minute stage talk</li>
                 <li>Main banner at the event</li>
                 <li>Pop-up spot to meet guests</li>
                 <li>Logo on signage</li>
@@ -606,7 +606,7 @@
               <h3>Gold</h3>
               <p class="price">$500</p>
               <ul>
-                <li>2-minute talk</li>
+                <li>2-minute stage talk</li>
                 <li>Logo on signage</li>
                 <li>Offer card in every goodie bag</li>
                 <li>Shared Instagram sponsor post</li>
@@ -664,16 +664,10 @@
                   <td class="no"><span class="mark" aria-hidden="true">—</span><span class="sr-only">Not included</span></td>
                   <td class="no"><span class="mark" aria-hidden="true">—</span><span class="sr-only">Not included</span></td>
                 </tr>
-                <tr>
-                  <th scope="row">5-minute talk on stage</th>
-                  <td class="yes"><span class="mark" aria-hidden="true">✓</span><span class="sr-only">Included</span></td>
-                  <td class="no"><span class="mark" aria-hidden="true">—</span><span class="sr-only">Not included</span></td>
-                  <td class="no"><span class="mark" aria-hidden="true">—</span><span class="sr-only">Not included</span></td>
-                </tr>
-                <tr>
-                  <th scope="row">2-minute talk</th>
-                  <td class="yes"><span class="mark" aria-hidden="true">✓</span><span class="sr-only">Included</span></td>
-                  <td class="yes"><span class="mark" aria-hidden="true">✓</span><span class="sr-only">Included</span></td>
+                <tr class="talk">
+                  <th scope="row">Stage talk</th>
+                  <td class="dur">5 min</td>
+                  <td class="dur">2 min</td>
                   <td class="no"><span class="mark" aria-hidden="true">—</span><span class="sr-only">Not included</span></td>
                 </tr>
                 <tr>
