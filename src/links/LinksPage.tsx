@@ -2,6 +2,7 @@ import { useState, type CSSProperties } from 'react';
 import { NewsletterForm } from '../NewsletterForm.tsx';
 import { CITY, MEETUP_URL } from '../config.ts';
 import { EventArtwork } from './EventArtwork.tsx';
+import { trackLinkClick } from './analytics.ts';
 import { FEATURED_MIXER, LINKS_EVENTS, type LinksEvent } from './events.ts';
 
 function Spark({ className = '' }: { className?: string }) {
@@ -29,7 +30,12 @@ function entranceStyle(index: number): CSSProperties {
 
 function FeaturedMixer() {
   return (
-    <a className="mixer-feature" href={FEATURED_MIXER.url} aria-labelledby="mixer-heading mixer-cta">
+    <a
+      className="mixer-feature"
+      href={FEATURED_MIXER.url}
+      aria-labelledby="mixer-heading mixer-cta"
+      data-analytics-section={FEATURED_MIXER.title}
+    >
       <span className="mixer-feature__sparkles" aria-hidden="true">
         <Spark className="mixer-feature__spark mixer-feature__spark--one" />
         <Spark className="mixer-feature__spark mixer-feature__spark--two" />
@@ -107,7 +113,11 @@ export default function LinksPage() {
   const marqueeItems = LINKS_EVENTS;
 
   return (
-    <div className={`links-page${motionPaused ? ' links-page--paused' : ''}`}>
+    <div
+      className={`links-page${motionPaused ? ' links-page--paused' : ''}`}
+      data-analytics-section="Links"
+      onClickCapture={trackLinkClick}
+    >
       <a className="links-skip" href="#plans">
         Skip to the plans
       </a>
@@ -118,7 +128,7 @@ export default function LinksPage() {
       </div>
 
       <div className="links-shell">
-        <header className="links-header">
+        <header className="links-header" data-analytics-section="Header">
           <div className="links-topline">
             <a className="links-brand" href="https://f8social.club" aria-label="F8 Social Club home">
               <span className="links-brand__stamp" aria-hidden="true">
@@ -181,7 +191,13 @@ export default function LinksPage() {
         </div>
 
         <main className="links-main">
-          <section className="links-plans" id="plans" aria-labelledby="plans-heading" tabIndex={-1}>
+          <section
+            className="links-plans"
+            id="plans"
+            aria-labelledby="plans-heading"
+            tabIndex={-1}
+            data-analytics-section="Pick your plan."
+          >
             <div className="links-section-heading">
               <h2 id="plans-heading">Pick your plan.</h2>
               <span aria-hidden="true">See you there ↓</span>
@@ -193,7 +209,11 @@ export default function LinksPage() {
             </ul>
           </section>
 
-          <nav className="links-more" aria-label="More Social Club links">
+          <nav
+            className="links-more"
+            aria-label="More Social Club links"
+            data-analytics-section="More Social Club links"
+          >
             <a
               className="extra-link extra-link--website links-reveal"
               href="https://f8social.club"
@@ -228,7 +248,7 @@ export default function LinksPage() {
             </a>
           </nav>
 
-          <div className="links-newsletter">
+          <div className="links-newsletter" data-analytics-section="Newsletter">
             <div className="newsletter-sticker" aria-hidden="true">
               A little hello.<br />Every week.
             </div>
