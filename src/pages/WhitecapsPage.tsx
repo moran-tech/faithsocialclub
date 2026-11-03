@@ -21,7 +21,10 @@ export function WhitecapsPage() {
         <Facts
           items={[
             { term: 'When', detail: `${whitecaps.when}, ${whitecaps.time}` },
-            { term: 'Price', detail: '$5 holds your seat. Food and drinks are ordered from the restaurant.' },
+            {
+              term: 'Price',
+              detail: `${whitecaps.price}. Food and drinks are ordered from the restaurant.`,
+            },
             {
               term: 'Where',
               detail: <VenueLink query={whitecaps.mapQuery}>{whitecaps.venueLine}</VenueLink>,

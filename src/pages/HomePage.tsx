@@ -175,9 +175,9 @@ export function HomePage() {
         <h2 className="script">Questions</h2>
         <h3>Is it free?</h3>
         <p>
-          Monday coworking and Thursday board game night are free. RSVP on Meetup. Special events are
-          separate: the Whitecaps watch party is $5 to hold a seat, and food and drinks are ordered from the
-          restaurant. The End of Year Mixer is $35 early bird or $45 regular.
+          Monday coworking, Thursday board game night, and the Whitecaps watch party are free. RSVP on
+          Meetup. Food and drinks at the watch party are ordered from the restaurant. The End of Year Mixer
+          is $35 early bird or $45 regular.
         </p>
         <h3>Do I need to know the games?</h3>
         <p>
