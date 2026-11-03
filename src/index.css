@@ -274,7 +274,8 @@ main > section {
 .week h2,
 .soon h2,
 .about h2,
-.cta h2 {
+.cta h2,
+main > section h2.script {
   font-size: clamp(36px, 5vw, 56px);
   line-height: 1.05;
   text-align: center;
@@ -774,6 +775,138 @@ main > section {
 
 .newsletter button.btn--ghost:disabled:hover {
   background: transparent;
+}
+
+.page-intro h1 {
+  font-size: clamp(40px, 6vw, 72px);
+  line-height: 0.98;
+  overflow-wrap: break-word;
+}
+
+.page-intro .lead,
+.page-intro p {
+  max-width: 42rem;
+}
+
+.event__next,
+.event__tagline {
+  margin: 0 0 8px;
+  font-weight: 800;
+}
+
+.venue,
+.rating a,
+.footer a,
+.related a,
+.section-link a,
+.faq a {
+  color: var(--green);
+  font-weight: 800;
+}
+
+.facts {
+  display: grid;
+  gap: 12px;
+  margin: 0 0 24px;
+}
+
+.facts div {
+  background: var(--paper);
+  border-radius: var(--radius);
+  padding: 16px 18px;
+}
+
+.facts dt {
+  font-weight: 800;
+  color: var(--green);
+}
+
+.facts dd {
+  margin: 4px 0 0;
+}
+
+.games {
+  padding-left: 20px;
+  margin: 0 0 24px;
+}
+
+.games li::marker {
+  color: var(--pink-deep);
+}
+
+.related {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 20px;
+  margin-top: 28px;
+}
+
+.section-link {
+  margin: 28px 0 0;
+  text-align: center;
+}
+
+.faq h3 {
+  font-size: 22px;
+  margin: 22px 0 4px;
+}
+
+.faq p {
+  margin: 0;
+  max-width: 42rem;
+}
+
+.event-index {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 12px;
+}
+
+.event-index a {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  background: var(--paper);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+  text-decoration: none;
+  border-top: 8px solid var(--sage);
+}
+
+.event-index time,
+.event-index__meta {
+  font-weight: 800;
+  color: var(--green-soft);
+}
+
+.event-index__title {
+  font-family: var(--script);
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--green);
+  line-height: 1.1;
+}
+
+.event-index__venue {
+  margin-top: 6px;
+  color: var(--green-soft);
+  font-weight: 700;
+}
+
+.figure-photo {
+  width: min(100%, 480px);
+  margin-top: 8px;
+  border-radius: var(--radius);
+}
+
+.footer .footer__links {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  margin-top: 8px;
 }
 
 .newsletter__result-title {
