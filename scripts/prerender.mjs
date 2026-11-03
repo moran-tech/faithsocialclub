@@ -132,11 +132,35 @@ assert.equal(whitecapsLd.offers.priceCurrency, 'CAD');
 assert.equal(whitecapsLd.offers.availability, 'https://schema.org/InStock');
 assert.match(whitecapsHtml, /name="twitter:description" content="[^"]*Free entry\./);
 
+for (const seriesPath of ['/coworking-surrey', '/board-game-night-surrey']) {
+  const seriesHtml = readFileSync(
+    join(root, 'dist', seriesPath.slice(1), 'index.html'),
+    'utf8',
+  );
+  const seriesLd = jsonLd(seriesHtml)[0];
+  assert.equal(seriesLd.startDate, undefined, seriesPath);
+  assert.equal(seriesLd.endDate, undefined, seriesPath);
+  assert.equal(seriesLd.eventSchedule['@type'], 'Schedule');
+  assert.equal(seriesLd.eventSchedule.repeatFrequency, 'P1W');
+  assert.equal(seriesLd.eventSchedule.scheduleTimezone, 'America/Vancouver');
+  assert.match(seriesLd.eventSchedule.byDay, /^https:\/\/schema\.org\/(Monday|Thursday)$/);
+  assert.equal(seriesLd.eventSchedule.startTime, '18:30:00');
+  assert.equal(seriesLd.eventSchedule.endTime, '20:00:00');
+}
+assert.equal(jsonLd(whitecapsHtml)[0].startDate, '2026-11-07T14:00:00-07:00');
+const mixerHtml = readFileSync(join(root, 'dist/events/end-of-year-mixer-2026-12-05/index.html'), 'utf8');
+assert.equal(jsonLd(mixerHtml)[0].startDate, '2026-12-05T18:30:00-07:00');
+
 function walkHtml(dir, files = []) {
   for (const entry of readdirSync(dir, { withFileTypes: true })) {
     const full = join(dir, entry.name);
     if (entry.isDirectory()) walkHtml(full, files);
-    else if (entry.name.endsWith('.html') && !full.includes(`${sep}end-of-year-mixer-sponsors${sep}`)) files.push(full);
+    else if (
+      (entry.name.endsWith('.html') || entry.name.endsWith('.js')) &&
+      !full.includes(`${sep}end-of-year-mixer-sponsors${sep}`)
+    ) {
+      files.push(full);
+    }
   }
   return files;
 }
@@ -144,6 +168,9 @@ for (const file of walkHtml(join(root, 'dist'))) {
   const text = readFileSync(file, 'utf8');
   if (/\$5(?!\d)/.test(text) || /holds your seat|hold a seat|Only 8 seats|\b8 seats\b/i.test(text)) {
     throw new Error(`Whitecaps price or seat limit still in ${file}`);
+  }
+  if (/2026-11-0[59]|November 5, 2026|November 9, 2026|Next session/.test(text)) {
+    throw new Error(`Weekly next-session date still in ${file}`);
   }
 }
 assert.equal(sitemap.includes('faithsocialclub.com'), false);
