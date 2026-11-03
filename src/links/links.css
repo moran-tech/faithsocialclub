@@ -67,7 +67,7 @@ h1, h2, h3, p { margin: 0; }
 .floating-shape--three { width: 100px; top: 1760px; left: calc(50% - 360px); color: var(--peach); animation-delay: -2s; }
 
 .links-topline { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 24px; }
-.links-brand { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; font-weight: 800; line-height: 1.2; font-size: 17px; }
+.links-brand { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; font-weight: 800; line-height: 1.2; font-size: 17px; white-space: nowrap; }
 .links-brand__stamp {
   display: grid;
   place-items: center;

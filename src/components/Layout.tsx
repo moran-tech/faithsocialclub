@@ -94,8 +94,8 @@ export function Layout({ path, children }: { path: string; children: ReactNode }
   return (
     <>
       <header className={menuOpen ? 'nav nav--open' : 'nav'} ref={navRef}>
-        <a className="nav__brand script" href="/" aria-label="f8 Social Club home" onClick={() => closeMenu()}>
-          Social Club
+        <a className="nav__brand script" href="/" aria-label="f8social.club home" onClick={() => closeMenu()}>
+          f8social.club
         </a>
         {isPhoneNav ? null : menu}
         <JoinButton onClick={() => closeMenu()} />
@@ -115,7 +115,7 @@ export function Layout({ path, children }: { path: string; children: ReactNode }
       {children}
       <footer className="footer">
         <p>
-          Social Club, hosted by Faith · {CITY} · © {new Date().getFullYear()}
+          f8social.club, hosted by Faith · {CITY} · © {new Date().getFullYear()}
         </p>
         <p className="footer__links">
           <a href={INSTAGRAM_URL}>Instagram @socialclub.pros</a>

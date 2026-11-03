@@ -142,10 +142,11 @@ const whitecapsLd = {
   '@type': 'Event',
   name: 'Whitecaps Watch Party: Whitecaps vs CF Montréal (MLS Decision Day)',
   description:
-    'Watch the Vancouver Whitecaps with other Surrey professionals. $5 holds your seat; food and drinks are ordered from the restaurant.',
+    'Watch the Vancouver Whitecaps with other Surrey professionals. Free entry; food and drinks are ordered from the restaurant.',
   startDate: '2026-11-07T14:00:00-07:00',
   eventStatus: 'https://schema.org/EventScheduled',
   eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+  isAccessibleForFree: true,
   location: {
     '@type': 'Place',
     name: browns.name,
@@ -159,7 +160,7 @@ const whitecapsLd = {
   },
   offers: {
     '@type': 'Offer',
-    price: 5,
+    price: 0,
     priceCurrency: 'CAD',
     availability: 'https://schema.org/InStock',
     url: MEETUP_EVENTS.whitecaps,
@@ -323,14 +324,14 @@ export const whitecaps: EventPage = {
     h1: 'Whitecaps Watch Party in Surrey',
     title: 'Whitecaps Watch Party in Surrey, Nov 7 | f8 Social Club',
     description:
-      'Watch Whitecaps vs CF Montréal on MLS Decision Day at Browns Socialhouse Surrey Centre, Sat Nov 7 at 2 PM. $5 holds your seat.',
+      'Watch Whitecaps vs CF Montréal on MLS Decision Day at Browns Socialhouse Surrey Centre, Sat Nov 7 at 2 PM. Free entry.',
     jsonLd: whitecapsLd,
   }),
   schedule: 'Saturday, November 7, 2026',
   when: 'Saturday, November 7, 2026',
   startDate: '2026-11-07T14:00:00-07:00',
   time: '2:00 PM',
-  price: '$5 holds your seat',
+  price: 'Free',
   venueLine: addressLine(browns),
   mapQuery: addressLine(browns),
   rsvp: MEETUP_EVENTS.whitecaps,
@@ -407,5 +408,6 @@ export function renderHead(entry: PageSeo): string {
     `<meta property="og:site_name" content="f8 Social Club" />`,
     `<meta property="og:locale" content="en_CA" />`,
     `<meta name="twitter:card" content="summary_large_image" />`,
+    `<meta name="twitter:description" content="${esc(entry.description)}" />`,
   ].join('\n');
 }

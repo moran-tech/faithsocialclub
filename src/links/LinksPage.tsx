@@ -130,12 +130,12 @@ export default function LinksPage() {
       <div className="links-shell">
         <header className="links-header" data-analytics-section="Header">
           <div className="links-topline">
-            <a className="links-brand" href="https://f8social.club" aria-label="F8 Social Club home">
+            <a className="links-brand" href="https://f8social.club" aria-label="f8social.club home">
               <span className="links-brand__stamp" aria-hidden="true">
                 F8
               </span>
               <span>
-                Social Club<span className="links-brand__host">Hosted by Faith</span>
+                f8social.club<span className="links-brand__host">Hosted by Faith</span>
               </span>
             </a>
             <button
@@ -259,7 +259,7 @@ export default function LinksPage() {
         <footer className="links-footer">
           <Spark />
           <p>Same people, brighter days.</p>
-          <span>Social Club, hosted by Faith · {CITY}</span>
+          <span>f8social.club, hosted by Faith · {CITY}</span>
         </footer>
       </div>
     </div>

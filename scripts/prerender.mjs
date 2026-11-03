@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
-import { dirname, join } from 'node:path';
+import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { dirname, join, sep } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
@@ -123,6 +123,29 @@ writeFileSync(linksPath, links);
 console.log('prerendered /links');
 
 assert.match(robots, /^User-agent: \*\nAllow: \/\n\nSitemap: https:\/\/f8social\.club\/sitemap\.xml\n$/);
+
+const whitecapsHtml = readFileSync(join(root, 'dist/events/whitecaps-watch-party-2026-11-07/index.html'), 'utf8');
+const whitecapsLd = jsonLd(whitecapsHtml)[0];
+assert.equal(whitecapsLd.isAccessibleForFree, true);
+assert.equal(whitecapsLd.offers.price, 0);
+assert.equal(whitecapsLd.offers.priceCurrency, 'CAD');
+assert.equal(whitecapsLd.offers.availability, 'https://schema.org/InStock');
+assert.match(whitecapsHtml, /name="twitter:description" content="[^"]*Free entry\./);
+
+function walkHtml(dir, files = []) {
+  for (const entry of readdirSync(dir, { withFileTypes: true })) {
+    const full = join(dir, entry.name);
+    if (entry.isDirectory()) walkHtml(full, files);
+    else if (entry.name.endsWith('.html') && !full.includes(`${sep}end-of-year-mixer-sponsors${sep}`)) files.push(full);
+  }
+  return files;
+}
+for (const file of walkHtml(join(root, 'dist'))) {
+  const text = readFileSync(file, 'utf8');
+  if (/\$5(?!\d)/.test(text) || /holds your seat|hold a seat|Only 8 seats|\b8 seats\b/i.test(text)) {
+    throw new Error(`Whitecaps price or seat limit still in ${file}`);
+  }
+}
 assert.equal(sitemap.includes('faithsocialclub.com'), false);
 for (const file of ['images/board-game-night.webp', 'images/coworking-group.webp', 'images/coworking-laptops.webp', 'og.jpg']) {
   if (!existsSync(join(root, 'dist', file))) throw new Error(`missing dist/${file}`);

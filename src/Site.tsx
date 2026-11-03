@@ -31,6 +31,7 @@ function usePageMeta(path: string) {
     document.querySelector('meta[property="og:url"]')?.setAttribute('content', page.canonical);
     document.querySelector('meta[property="og:title"]')?.setAttribute('content', page.ogTitle);
     document.querySelector('meta[property="og:description"]')?.setAttribute('content', page.description);
+    document.querySelector('meta[name="twitter:description"]')?.setAttribute('content', page.description);
     document.querySelector('meta[property="og:image"]')?.setAttribute('content', 'https://f8social.club/og.jpg');
   }, [path]);
 }
