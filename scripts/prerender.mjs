@@ -58,6 +58,15 @@ function imagePaths(value) {
   }
 }
 
+assert.equal(ssr.normalizePath('/index.html'), '/');
+assert.equal(ssr.normalizePath('/about/index.html'), '/about');
+assert.equal(ssr.normalizePath('/about/'), '/about');
+assert.equal(
+  ssr.normalizePath('/events/whitecaps-watch-party-2026-11-07/index.html'),
+  '/events/whitecaps-watch-party-2026-11-07',
+);
+assert.match(ssr.render('/about/index.html').head, /About f8 Social Club/);
+
 for (const page of ssr.PAGES) {
   if (page.path !== '/' && !viteConfig.includes(`'${page.path}'`)) {
     throw new Error(`Add ${page.path} to SEO_DEV_ROUTES in vite.config.ts`);

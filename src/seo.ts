@@ -374,8 +374,11 @@ export const upcoming: EventPage[] = [board, whitecaps, coworking, mixer];
 export const GAMES = ['Wavelength', 'Catch the Vibe', 'Avalon', 'Sushi Go', 'Spyfall', 'Codenames'];
 
 export function normalizePath(url: string): string {
-  const path = url.split('?')[0]?.split('#')[0] ?? '/';
-  if (path.length > 1 && path.endsWith('/')) return path.slice(0, -1);
+  let path = url.split('?')[0]?.split('#')[0] ?? '/';
+  // The static host serves /about/index.html as the same file as /about.
+  // Leaving the suffix on makes the client render nothing over that HTML.
+  if (path.endsWith('/index.html')) path = path.slice(0, -'index.html'.length);
+  if (path.length > 1 && path.endsWith('/')) path = path.slice(0, -1);
   return path || '/';
 }
 

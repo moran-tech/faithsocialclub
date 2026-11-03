@@ -24,4 +24,4 @@ export function renderLinks(): string {
   );
 }
 
-export { PAGES };
+export { PAGES, normalizePath };
