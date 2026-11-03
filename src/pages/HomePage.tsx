@@ -1,7 +1,7 @@
 import { NewsletterForm } from '../NewsletterForm.tsx';
 import { EVENTS, MEETUP_URL, type ClubEvent } from '../config.ts';
 import { MeetupRating, Rsvp, VenueLink } from '../components/ui.tsx';
-import { board, coworking, mixer, whitecaps, type EventPage } from '../seo.ts';
+import { board, coworking, mixer, whitecaps, type DatedEventPage, type EventPage } from '../seo.ts';
 
 const seriesById = {
   coworking,
@@ -37,10 +37,7 @@ function EventCard({ event, details }: { event: ClubEvent; details: EventPage })
     <article className={`event event--${event.accent}`} id={event.id}>
       <EventMedia event={event} />
       <div className="event__body">
-        <p className="event__when">
-          Every {event.day} · {event.time}
-        </p>
-        <p className="event__next">Next: {details.when}</p>
+        <p className="event__when">{details.schedule}</p>
         <h3 className="script event__title">{event.title}</h3>
         <p className="pill">Free</p>
         <p className="event__tagline">{event.tagline}</p>
@@ -64,7 +61,7 @@ function EventCard({ event, details }: { event: ClubEvent; details: EventPage })
   );
 }
 
-function SpecialCard({ event }: { event: EventPage }) {
+function SpecialCard({ event }: { event: DatedEventPage }) {
   return (
     <article className={`event event--${event.accent}`}>
       <div className="event__body">
@@ -189,8 +186,8 @@ export function HomePage() {
         <h3>Where do I park?</h3>
         <p>
           The club does not reserve parking. Coworking is at Chai Coffee Company, 11088 126a St #100, Surrey.
-          Board game night posts that week's venue on Meetup. This week it is the Central City Mall food
-          court, 10153 King George Blvd, Surrey. Use the map link on the event page for the address.
+          Board game night is at the Central City Mall food court, 10153 King George Blvd, Surrey. Use the
+          map link on the event page for the address.
         </p>
       </section>
 

@@ -7,7 +7,7 @@ Weekly events:
 - **Monday Coworking**, free, 6:30 – 8:00 PM at Chai Coffee Company
 - **Thursday Board Game Night**, free, 6:30 – 8:00 PM
 
-Dated events (Whitecaps watch party, end-of-year mixer, and the next session of each weekly series) live in `src/seo.ts`. Update those dates when the next session changes so the page copy and Event JSON-LD stay on the upcoming night. Weekly titles, photos, and the links page still read `EVENTS` in `src/config.ts`.
+Monday coworking and Thursday board game night are recurring. Their pages describe the weekly time, not a next session. Dated one-offs (the Whitecaps watch party and the end-of-year mixer) live in `src/seo.ts`. Weekly titles, photos, and the links page still read `EVENTS` in `src/config.ts`.
 
 RSVPs go through Meetup.
 
@@ -53,7 +53,7 @@ The request body is JSON: `email`, optional `firstName` (omitted when blank), `c
 
 ## Editing content
 
-Weekly event blurbs and the Meetup link live in `src/config.ts`. Page titles, the next session dates, and JSON-LD live in `src/seo.ts`.
+Weekly event blurbs and the Meetup link live in `src/config.ts`. Page titles and JSON-LD live in `src/seo.ts`.
 
 Images live in `public/images/` (resized from the originals in `../social club/`). Coworking photos are the `photos` list on the Monday event.
 

@@ -68,14 +68,24 @@ const nazrana = {
   postal: 'V3W 3B2',
 };
 
+function weeklySchedule(day: 'Monday' | 'Thursday') {
+  return {
+    '@type': 'Schedule',
+    repeatFrequency: 'P1W',
+    byDay: `https://schema.org/${day}`,
+    startTime: '18:30:00',
+    endTime: '20:00:00',
+    scheduleTimezone: 'America/Vancouver',
+  };
+}
+
 const coworkingLd = {
   '@context': 'https://schema.org',
   '@type': 'Event',
   name: 'Surrey Coworking with Deep Work Focus',
   description:
     'Free weekly coworking for builders, creators, freelancers and founders. Say your goal, do an hour of deep work, then network.',
-  startDate: '2026-11-09T18:30:00-07:00',
-  endDate: '2026-11-09T20:00:00-07:00',
+  eventSchedule: weeklySchedule('Monday'),
   eventStatus: 'https://schema.org/EventScheduled',
   eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
   isAccessibleForFree: true,
@@ -108,8 +118,7 @@ const boardLd = {
   name: 'Board Game Night in Surrey',
   description:
     'A relaxed night of party and strategy games like Wavelength, Catch the Vibe, Avalon, Sushi Go, Spyfall and Codenames. No experience needed; come solo or bring a friend.',
-  startDate: '2026-11-05T18:30:00-07:00',
-  endDate: '2026-11-05T20:00:00-07:00',
+  eventSchedule: weeklySchedule('Thursday'),
   eventStatus: 'https://schema.org/EventScheduled',
   eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
   isAccessibleForFree: true,
@@ -225,14 +234,17 @@ export type PageSeo = {
 
 export type EventPage = PageSeo & {
   schedule: string;
-  when: string;
-  startDate: string;
   time: string;
   price: string;
   venueLine: string;
   mapQuery: string;
   rsvp: string;
   accent: 'pink' | 'sage' | 'peach';
+};
+
+export type DatedEventPage = EventPage & {
+  when: string;
+  startDate: string;
 };
 
 function canonicalFor(path: string): string {
@@ -279,9 +291,7 @@ export const coworking: EventPage = {
       'Bring your laptop to Chai Coffee Company every Monday at 6:30 PM. Set a goal, do an hour of deep work, then meet other builders and creators. Free.',
     jsonLd: coworkingLd,
   }),
-  schedule: 'Every Monday',
-  when: 'Monday, November 9, 2026',
-  startDate: '2026-11-09T18:30:00-07:00',
+  schedule: 'Every Monday, 6:30 PM',
   time: '6:30 – 8:00 PM',
   price: 'Free',
   venueLine: addressLine(chai),
@@ -299,12 +309,10 @@ export const board: EventPage = {
       'Weekly board game night in Surrey: Codenames, Avalon, Wavelength and more. No experience needed, come solo or bring a friend. Free to join.',
     jsonLd: boardLd,
   }),
-  schedule: 'Every Thursday',
-  when: 'Thursday, November 5, 2026',
-  startDate: '2026-11-05T18:30:00-07:00',
+  schedule: 'Every Thursday, 6:30 PM',
   time: '6:30 – 8:00 PM',
   price: 'Free',
-  venueLine: `This week: ${addressLine(centralCity)}`,
+  venueLine: addressLine(centralCity),
   mapQuery: addressLine(centralCity),
   rsvp: MEETUP_EVENTS.board,
   accent: 'pink',
@@ -318,7 +326,7 @@ export const eventsPage = page({
     'Upcoming coworking, board game nights, watch parties and mixers for professionals in Surrey, BC.',
 });
 
-export const whitecaps: EventPage = {
+export const whitecaps: DatedEventPage = {
   ...page({
     path: '/events/whitecaps-watch-party-2026-11-07',
     h1: 'Whitecaps Watch Party in Surrey',
@@ -338,7 +346,7 @@ export const whitecaps: EventPage = {
   accent: 'peach',
 };
 
-export const mixer: EventPage = {
+export const mixer: DatedEventPage = {
   ...page({
     path: '/events/end-of-year-mixer-2026-12-05',
     h1: 'End of Year Mixer for Surrey Professionals',
@@ -370,7 +378,9 @@ export const about = page({
 
 export const PAGES: PageSeo[] = [home, coworking, board, eventsPage, whitecaps, mixer, about];
 
-export const upcoming: EventPage[] = [board, whitecaps, coworking, mixer];
+export const weeklySeries: EventPage[] = [coworking, board];
+
+export const datedEvents: DatedEventPage[] = [whitecaps, mixer];
 
 export const GAMES = ['Wavelength', 'Catch the Vibe', 'Avalon', 'Sushi Go', 'Spyfall', 'Codenames'];
 

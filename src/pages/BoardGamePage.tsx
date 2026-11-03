@@ -18,14 +18,13 @@ export function BoardGamePage() {
       </section>
 
       <section>
-        <h2 className="script">This Thursday</h2>
+        <h2 className="script">Every Thursday</h2>
         <Facts
           items={[
-            { term: 'When', detail: `${board.schedule}, ${board.time}` },
-            { term: 'Next session', detail: `${board.when}, ${board.time}` },
+            { term: 'When', detail: board.schedule },
             { term: 'Price', detail: 'Free' },
             {
-              term: 'This week',
+              term: 'Where',
               detail: <VenueLink query={board.mapQuery}>{board.venueLine}</VenueLink>,
             },
           ]}

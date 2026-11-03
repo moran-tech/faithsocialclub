@@ -21,8 +21,7 @@ export function CoworkingPage() {
         <h2 className="script">How Monday works</h2>
         <Facts
           items={[
-            { term: 'When', detail: `${coworking.schedule}, ${coworking.time}` },
-            { term: 'Next session', detail: `${coworking.when}, ${coworking.time}` },
+            { term: 'When', detail: coworking.schedule },
             { term: 'Price', detail: 'Free' },
             {
               term: 'Where',
