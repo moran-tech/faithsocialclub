@@ -1,17 +1,15 @@
-# Social Club, hosted by Faith
+# f8 Social Club
 
-Landing page for Faith's Social Club in Surrey, BC. Future domain: **faithsocialclub.com**.
+Landing pages for f8 Social Club in Surrey, BC. Canonical host: **https://f8social.club**.
 
 Weekly events:
 
-- **Monday Coworking**, 6:30 – 8:00 PM
-- **Thursday Board Game Night**, 6:30 – 8:00 PM
+- **Monday Coworking**, free, 6:30 – 8:00 PM at Chai Coffee Company
+- **Thursday Board Game Night**, free, 6:30 – 8:00 PM
 
-Coming soon:
+Dated events (Whitecaps watch party, end-of-year mixer, and the next session of each weekly series) live in `src/seo.ts`. Update those dates when the next session changes so the page copy and Event JSON-LD stay on the upcoming night. Weekly titles, photos, and the links page still read `EVENTS` in `src/config.ts`.
 
-- **Sports Watch Parties**, On a Saturday
-
-RSVPs go through Meetup. Live events are listed in `EVENTS`. Announced events that don't have a time or place yet go in `COMING_SOON` — add another object there and it shows up in the Coming soon section.
+RSVPs go through Meetup.
 
 ## Run locally
 
@@ -30,11 +28,16 @@ It reads weekly `EVENTS` from `src/config.ts` and adds one-off events in
 `NewsletterForm`, including the same `VITE_SUBSCRIBE_API_URL` build setting as the
 homepage.
 
-Vite's multi-page inputs build both `dist/index.html` and `dist/links/index.html`.
-With Render's publish directory set to `dist`, `/links` resolves to the directory's
-`index.html` (also available as `/links/` or `/links/index.html`), including direct
-visits and refreshes. No client-side router or SPA fallback rewrite is needed.
-Keep both HTML inputs in `vite.config.ts` when changing the build.
+Vite's multi-page inputs build `dist/index.html` and `dist/links/index.html`.
+`npm run build` then pre-renders each public route to its own `index.html`, so the
+first response already contains the title, copy, and JSON-LD. With Render's publish
+directory set to `dist`, `/coworking-surrey` and `/links` resolve to that directory's
+`index.html` (also as a trailing slash or `index.html`). Do not add a catch-all
+rewrite to `/index.html`; unknown paths should stay 404s.
+
+Routes: `/`, `/coworking-surrey`, `/board-game-night-surrey`, `/events`,
+`/events/whitecaps-watch-party-2026-11-07`, `/events/end-of-year-mixer-2026-12-05`,
+`/about`, and `/links`. `public/robots.txt` and `public/sitemap.xml` are copied into `dist`.
 
 Use Node 20.19+ or 22.12+ for the current Vite version.
 
@@ -50,12 +53,12 @@ The request body is JSON: `email`, optional `firstName` (omitted when blank), `c
 
 ## Editing content
 
-Event details, times, and the Meetup link live in `src/config.ts`.
+Weekly event blurbs and the Meetup link live in `src/config.ts`. Page titles, the next session dates, and JSON-LD live in `src/seo.ts`.
 
 Images live in `public/images/` (resized from the originals in `../social club/`). Coworking photos are the `photos` list on the Monday event.
 
 ## Deploy on Render
 
-Static site: build `npm install; npm run build`, publish path `dist`. Once faithsocialclub.com is purchased, add it as a custom domain on the static site.
+Static site: build `npm install; npm run build`, publish path `dist`. The custom domain is f8social.club.
 
 Set `VITE_SUBSCRIBE_API_URL` to `https://fireplace-waitlist.onrender.com/f8social/subscribe` before that build.

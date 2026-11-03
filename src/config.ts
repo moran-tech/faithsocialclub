@@ -1,5 +1,6 @@
-export const MEETUP_URL =
-  'https://www.meetup.com/coworking-surrey-hosted-by-morantech/?eventOrigin=home_groups_you_organize';
+export const MEETUP_URL = 'https://www.meetup.com/coworking-surrey-hosted-by-morantech/';
+
+export const INSTAGRAM_URL = 'https://www.instagram.com/socialclub.pros/';
 
 export const CITY = 'Surrey, BC';
 
@@ -26,14 +27,6 @@ export type ClubEvent = {
   accent: EventAccent;
 };
 
-/** Announced events that don't have a time, place, or other details yet. */
-export type ComingSoonEvent = {
-  id: string;
-  day: string;
-  title: string;
-  accent: EventAccent;
-};
-
 export const EVENTS: ClubEvent[] = [
   {
     id: 'coworking',
@@ -42,7 +35,7 @@ export const EVENTS: ClubEvent[] = [
     title: 'Monday Coworking',
     tagline: 'Get things done, together',
     description:
-      'Bring a laptop, a side project, or that thing you keep putting off. We share what we are working on, focus together, and catch up after.',
+      'Free weekly coworking for builders, creators, freelancers, and founders. Say your goal, do an hour of deep work, then network.',
     points: [
       'Say your goal for the session out loud',
       'Quiet focus time with good company',
@@ -73,22 +66,13 @@ export const EVENTS: ClubEvent[] = [
     title: 'Board Game Night',
     tagline: 'Play games · Meet new people · Have fun',
     description:
-      'A relaxed board game night at a café in Surrey. New to board games or already a hobby gamer, everyone is welcome.',
+      'A relaxed night of party and strategy games like Wavelength, Catch the Vibe, Avalon, Sushi Go, Spyfall, and Codenames. No experience needed. Come solo or bring a friend.',
     points: [
       'No experience needed. We explain the rules first.',
-      'Come solo or bring a friend. Most come solo!',
-      'Harmonies, Spyfall, Codenames, Avalon, Jaipur, Sushi Go',
+      'Come solo or bring a friend. Most come solo.',
+      'Wavelength, Catch the Vibe, Avalon, Sushi Go, Spyfall, and Codenames',
     ],
-    image: '/images/boardgame-night.jpg',
+    image: '/images/board-game-night.webp',
     accent: 'pink',
-  },
-];
-
-export const COMING_SOON: ComingSoonEvent[] = [
-  {
-    id: 'sports-watch',
-    day: 'Saturday',
-    title: 'Sports Watch Parties',
-    accent: 'peach',
   },
 ];

@@ -1,6 +1,6 @@
 import { useState, type CSSProperties } from 'react';
 import { NewsletterForm } from '../NewsletterForm.tsx';
-import { CITY, MEETUP_URL } from '../config.ts';
+import { CITY, INSTAGRAM_URL, MEETUP_URL } from '../config.ts';
 import { EventArtwork } from './EventArtwork.tsx';
 import { trackLinkClick } from './analytics.ts';
 import { FEATURED_MIXER, LINKS_EVENTS, type LinksEvent } from './events.ts';
@@ -230,7 +230,7 @@ export default function LinksPage() {
             </a>
             <a
               className="extra-link extra-link--instagram links-reveal"
-              href="https://www.instagram.com/socialclub.pros/"
+              href={INSTAGRAM_URL}
               style={entranceStyle(marqueeItems.length + 1)}
             >
               <span className="extra-link__icon" aria-hidden="true">
