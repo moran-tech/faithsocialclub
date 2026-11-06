@@ -65,7 +65,12 @@ export function nextWeeklyWindow(day: 'Monday' | 'Thursday', now = new Date()): 
   };
 }
 
-export const FAQ = [
+export type FaqItem = {
+  question: string;
+  answer: string;
+};
+
+export const FAQ: readonly FaqItem[] = [
   {
     question: 'Is it free?',
     answer:
@@ -85,7 +90,49 @@ export const FAQ = [
     answer:
       'The club does not reserve parking. Coworking is at Chai Coffee Company, 11088 126a St #100, Surrey. Board game night is at the Central City Mall food court, 10153 King George Blvd, Surrey. Use the map link on the event page for the address.',
   },
-] as const;
+];
+
+export const MEETUPS_FAQ: readonly FaqItem[] = [
+  {
+    question: 'What meetups are in Surrey?',
+    answer:
+      'f8 Social Club hosts two free meetups in Surrey every week for professionals. Monday coworking is 6:30 – 8:00 PM at Chai Coffee Company, 11088 126a St #100. Thursday board game night is 6:30 – 8:00 PM at the Central City Mall food court. RSVP on Meetup. Other groups also post on Meetup.com. This page is our club, not a directory of every meetup in the city.',
+  },
+  {
+    question: 'Where can I meet people in Surrey?',
+    answer:
+      'Come back to the same weekly meetup. Monday coworking at Chai Coffee Company and Thursday board games at Central City Mall are both free and start at 6:30 PM. Most people arrive alone. RSVP on Meetup so we know to expect you.',
+  },
+  {
+    question: 'How do I meet people in Surrey?',
+    answer:
+      'RSVP for one night, show up, and come again the next week. Monday coworking is an hour of quiet work, then conversation. Thursday board game night starts with the rules, so you can sit down without knowing anyone. The same room each week is how names become friends.',
+  },
+  {
+    question: 'Where can adults go in Surrey today?',
+    answer:
+      'On Mondays, coworking at Chai Coffee Company, 6:30 – 8:00 PM. On Thursdays, board games at the Central City Mall food court, 6:30 – 8:00 PM. Both are free and meant for adults who want company after work. Other dates, including the Whitecaps watch party and the End of Year Mixer, are on the events page.',
+  },
+  {
+    question: 'Are the meetups free?',
+    answer:
+      'Yes. Monday coworking and Thursday board game night are free. RSVP on Meetup. The Whitecaps watch party is free entry, and food and drinks are ordered from the restaurant. The End of Year Mixer is $35 early bird or $45 regular.',
+  },
+  {
+    question: 'Can I come alone?',
+    answer: 'Yes. Most people come solo. Bringing a friend is welcome too.',
+  },
+  {
+    question: 'Where are the meetups?',
+    answer:
+      'Coworking is at Chai Coffee Company, 11088 126a St #100, Surrey. Board game night is at the Central City Mall food court, 10153 King George Blvd, Surrey. Both run 6:30 – 8:00 PM.',
+  },
+  {
+    question: 'Has anything replaced Meetup?',
+    answer:
+      'Nothing has replaced Meetup for this club. Meetup is still active, and it is where we RSVP for Monday coworking, Thursday board games, and the other Surrey events.',
+  },
+];
 
 export const MEETUP_EVENTS = {
   coworking: 'https://www.meetup.com/coworking-surrey-hosted-by-morantech/events/zqvrbvyjcpbmb/',
@@ -361,18 +408,22 @@ function eventNode(ld: { '@context': string; name: string }): JsonLd {
   return rest;
 }
 
-const faqLd: JsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'FAQPage',
-  mainEntity: FAQ.map((item) => ({
-    '@type': 'Question',
-    name: item.question,
-    acceptedAnswer: {
-      '@type': 'Answer',
-      text: item.answer,
-    },
-  })),
-};
+function faqPageLd(items: readonly FaqItem[]): JsonLd {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: items.map((item) => ({
+      '@type': 'Question',
+      name: item.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: item.answer,
+      },
+    })),
+  };
+}
+
+const faqLd: JsonLd = faqPageLd(FAQ);
 
 const eventsListLd: JsonLd = {
   '@context': 'https://schema.org',
@@ -398,6 +449,15 @@ const eventsCrumbLd: JsonLd = {
   itemListElement: [
     { '@type': 'ListItem', position: 1, name: 'Home', item: `${ORIGIN}/` },
     { '@type': 'ListItem', position: 2, name: 'Events', item: canonicalFor('/events') },
+  ],
+};
+
+const meetupsCrumbLd: JsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: `${ORIGIN}/` },
+    { '@type': 'ListItem', position: 2, name: 'Meetups in Surrey', item: canonicalFor('/meetups-in-surrey') },
   ],
 };
 
@@ -469,6 +529,15 @@ export const board: EventPage = {
   accent: 'pink',
 };
 
+export const meetups = page({
+  path: '/meetups-in-surrey',
+  h1: 'Meetups in Surrey',
+  title: 'Meetups in Surrey BC | Free Weekly Social Events | f8 Social Club',
+  description:
+    'Free weekly meetups in Surrey, BC for professionals: Monday coworking and Thursday board games at 6:30 PM. Come solo and RSVP on Meetup.',
+  jsonLd: [faqPageLd(MEETUPS_FAQ), meetupsCrumbLd],
+});
+
 export const eventsPage = page({
   path: '/events',
   h1: 'Surrey Events This Month',
@@ -530,7 +599,7 @@ export const about = page({
   jsonLd: [orgLd, faithLd],
 });
 
-export const PAGES: PageSeo[] = [home, coworking, board, eventsPage, whitecaps, mixer, about];
+export const PAGES: PageSeo[] = [home, meetups, coworking, board, eventsPage, whitecaps, mixer, about];
 
 export const weeklySeries: EventPage[] = [coworking, board];
 

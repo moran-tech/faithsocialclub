@@ -1,6 +1,6 @@
 import { Facts, Related, Rsvp, VenueLink } from '../components/ui.tsx';
 import { EXTRA_COWORKING_PHOTOS } from '../config.ts';
-import { board, coworking, eventsPage } from '../seo.ts';
+import { board, coworking, eventsPage, meetups } from '../seo.ts';
 
 export function CoworkingPage() {
   return (
@@ -58,6 +58,7 @@ export function CoworkingPage() {
         </div>
         <Related
           links={[
+            { href: meetups.path, label: 'Meetups in Surrey' },
             { href: board.path, label: 'Thursday board game night' },
             { href: eventsPage.path, label: 'Surrey events this month' },
           ]}

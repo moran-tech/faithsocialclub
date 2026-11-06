@@ -95,8 +95,8 @@ export function HomePage() {
             Make friends <span className="highlight">outside work</span> in Surrey, BC
           </h1>
           <p className="lead">
-            A social club for professionals. Free coworking on Mondays, free board games on Thursdays, and
-            good people every week.
+            <a href="/meetups-in-surrey">Meetups in Surrey</a> for professionals who want friends outside work.
+            Free coworking on Mondays, free board games on Thursdays, and good people every week.
           </p>
           <MeetupRating />
           <div className="hero__actions">

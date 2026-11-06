@@ -1,4 +1,4 @@
-import { datedEvents, eventsPage, weeklySeries } from '../seo.ts';
+import { datedEvents, eventsPage, meetups, weeklySeries } from '../seo.ts';
 
 export function EventsPage() {
   return (
@@ -12,7 +12,10 @@ export function EventsPage() {
         <p className="eyebrow">Surrey, BC</p>
         <h1 className="script">{eventsPage.h1}</h1>
         <p className="lead">{eventsPage.description}</p>
-        <p>Coworking and board game night repeat every week. One-off events are listed with their dates.</p>
+        <p>
+          <a href={meetups.path}>Meetups in Surrey</a> repeat every week: coworking on Monday and board games
+          on Thursday. One-off events are listed with their dates.
+        </p>
       </section>
       <section>
         <h2 className="script">Every week</h2>

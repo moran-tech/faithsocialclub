@@ -1,6 +1,6 @@
 import { MeetupRating, Related } from '../components/ui.tsx';
 import { INSTAGRAM_URL, MEETUP_URL } from '../config.ts';
-import { about, board, coworking, eventsPage } from '../seo.ts';
+import { about, board, coworking, eventsPage, meetups } from '../seo.ts';
 
 export function AboutPage() {
   return (
@@ -20,8 +20,9 @@ export function AboutPage() {
         </p>
         <h2 className="script">The week</h2>
         <p>
-          Coworking is free every Monday at 6:30 PM at Chai Coffee Company. Board game night is free every
-          Thursday at 6:30 PM. Watch parties and mixers land on the events page when a date is set.
+          <a href={meetups.path}>Meetups in Surrey</a> are free every week at this club. Coworking is
+          Monday at 6:30 PM at Chai Coffee Company. Board game night is Thursday at 6:30 PM. Watch parties
+          and mixers land on the events page when a date is set.
         </p>
         <h2 className="script">Faith Morante</h2>
         <p>Faith Morante hosts f8 Social Club for Professionals. She is the founder of the club.</p>
@@ -58,6 +59,7 @@ export function AboutPage() {
         />
         <Related
           links={[
+            { href: meetups.path, label: 'Meetups in Surrey' },
             { href: coworking.path, label: 'Monday coworking' },
             { href: board.path, label: 'Thursday board game night' },
             { href: eventsPage.path, label: 'Surrey events this month' },

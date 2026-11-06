@@ -33,8 +33,9 @@ Vite's multi-page inputs build `dist/index.html` and `dist/links/index.html`.
 Every other route is written to `dist/_pages/<path>.html` (including `/links`),
 and the old `path/index.html` copies are not published. That lets Render 301
 `/path/` to `/path`. The rewrite and redirect rules live in `render.yaml`. Copy
-them onto the existing static site before deploying this layout. Do not add a
-catch-all rewrite to `/index.html`; unknown paths should stay 404s.
+them onto the existing static site before deploying this layout. Each clean URL
+has its own rewrite to `/_pages/<path>.html`. Do not add a `/*` catch-all
+rewrite; that rule redirected in a loop, and unknown paths should stay 404s.
 
 `/end-of-year-mixer-sponsors/` keeps its directory `index.html` because GitHub
 Pages publishes that folder. Render will not 301 a path that is a real file.
@@ -45,7 +46,7 @@ Those two timestamps are calculated when the site is built. Rebuild after they
 pass so the next occurrence stays current. Visible copy still says "every Monday"
 and "every Thursday".
 
-Routes: `/`, `/coworking-surrey`, `/board-game-night-surrey`, `/events`,
+Routes: `/`, `/meetups-in-surrey`, `/coworking-surrey`, `/board-game-night-surrey`, `/events`,
 `/events/whitecaps-watch-party-2026-11-07`, `/events/end-of-year-mixer-2026-12-05`,
 `/about`, `/links`, and `/end-of-year-mixer-sponsors`. `public/robots.txt`,
 `public/sitemap.xml`, and `public/llms.txt` are copied into `dist`.
@@ -72,6 +73,6 @@ Images live in `public/images/` (resized from the originals in `../social club/`
 
 Static site: build `npm install; npm run build`, publish path `dist`. The custom domain is f8social.club.
 
-Redirects and rewrites (also in `render.yaml`): 301 each trailing-slash URL to the slashless path, then rewrite slashless paths to `/_pages/*.html`. Add `X-Robots-Tag: noindex` on `/_pages/*`. Apply those rules on the existing service in the same deploy as this build. Without the rewrite, clean URLs 404.
+Redirects and rewrites (also in `render.yaml`): 301 each trailing-slash URL to the slashless path, then rewrite that exact path to its file under `/_pages/`. `/meetups-in-surrey/` redirects to `/meetups-in-surrey`, which rewrites to `/_pages/meetups-in-surrey.html`. Do the same for the other public paths. Do not add a `/*` rewrite to `/_pages/*.html`. Add `X-Robots-Tag: noindex` on `/_pages/*`. Apply those rules on the existing service in the same deploy as this build. Without the rewrite, clean URLs 404.
 
 Set `VITE_SUBSCRIBE_API_URL` to `https://fireplace-waitlist.onrender.com/f8social/subscribe` before that build.

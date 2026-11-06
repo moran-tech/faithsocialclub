@@ -1,5 +1,5 @@
 import { Facts, Related, Rsvp, VenueLink } from '../components/ui.tsx';
-import { board, coworking, eventsPage, GAMES } from '../seo.ts';
+import { board, coworking, eventsPage, GAMES, meetups } from '../seo.ts';
 
 export function BoardGamePage() {
   return (
@@ -45,6 +45,7 @@ export function BoardGamePage() {
         />
         <Related
           links={[
+            { href: meetups.path, label: 'Meetups in Surrey' },
             { href: coworking.path, label: 'Monday coworking' },
             { href: eventsPage.path, label: 'Surrey events this month' },
           ]}
