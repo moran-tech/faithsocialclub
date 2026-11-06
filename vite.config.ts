@@ -6,6 +6,7 @@ import react from '@vitejs/plugin-react';
 
 // Keep in sync with PAGES in src/seo.ts. scripts/prerender.mjs checks this list.
 const SEO_DEV_ROUTES = [
+  '/meetups-in-surrey',
   '/coworking-surrey',
   '/board-game-night-surrey',
   '/events',

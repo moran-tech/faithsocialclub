@@ -1,4 +1,4 @@
-# Trailing-slash redirects for the existing f8social.club static site.
+# Trailing-slash redirects and explicit rewrites for the existing f8social.club static site.
 #
 # Render serves a real file before it applies a route, so path/index.html would
 # keep /path/ as a second 200. This build publishes each clean URL as
@@ -9,8 +9,10 @@
 # If f8social.club already exists in Render, copy `routes` and `headers` onto
 # that service. Do not sync this file as a second static site, and do not move
 # the f8social.club domain onto a new service.
-# Add the rules before the deploy that removes the old directory indexes.
-# Until the rewrite is live, /coworking-surrey and the other clean URLs 404.
+# Each public path has its own trailing-slash redirect and its own rewrite to
+# /_pages/<path>.html. Do not add a /* catch-all rewrite. That rule redirected
+# in a loop on this service. Unknown paths should stay 404s.
+# Until these rewrites are on the service, the clean URLs 404.
 
 services:
   - type: web
@@ -22,6 +24,9 @@ services:
       - key: VITE_SUBSCRIBE_API_URL
         value: https://fireplace-waitlist.onrender.com/f8social/subscribe
     routes:
+      - type: redirect
+        source: /meetups-in-surrey/
+        destination: /meetups-in-surrey
       - type: redirect
         source: /coworking-surrey/
         destination: /coworking-surrey
@@ -43,12 +48,30 @@ services:
       - type: redirect
         source: /links/
         destination: /links
-      - type: redirect
-        source: /*/
-        destination: /*
       - type: rewrite
-        source: /*
-        destination: /_pages/*.html
+        source: /meetups-in-surrey
+        destination: /_pages/meetups-in-surrey.html
+      - type: rewrite
+        source: /coworking-surrey
+        destination: /_pages/coworking-surrey.html
+      - type: rewrite
+        source: /board-game-night-surrey
+        destination: /_pages/board-game-night-surrey.html
+      - type: rewrite
+        source: /events/whitecaps-watch-party-2026-11-07
+        destination: /_pages/events/whitecaps-watch-party-2026-11-07.html
+      - type: rewrite
+        source: /events/end-of-year-mixer-2026-12-05
+        destination: /_pages/events/end-of-year-mixer-2026-12-05.html
+      - type: rewrite
+        source: /events
+        destination: /_pages/events.html
+      - type: rewrite
+        source: /about
+        destination: /_pages/about.html
+      - type: rewrite
+        source: /links
+        destination: /_pages/links.html
     headers:
       - path: /_pages/*
         name: X-Robots-Tag

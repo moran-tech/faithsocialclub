@@ -4,6 +4,7 @@ import { CITY, INSTAGRAM_URL, MEETUP_URL } from '../config.ts';
 const PHONE_NAV_QUERY = '(max-width: 479px)';
 
 const LINKS = [
+  { href: '/meetups-in-surrey', label: 'Meetups' },
   { href: '/events', label: 'Events' },
   { href: '/coworking-surrey', label: 'Coworking' },
   { href: '/board-game-night-surrey', label: 'Board games' },

@@ -5,12 +5,14 @@ import { BoardGamePage } from './pages/BoardGamePage.tsx';
 import { CoworkingPage } from './pages/CoworkingPage.tsx';
 import { EventsPage } from './pages/EventsPage.tsx';
 import { HomePage } from './pages/HomePage.tsx';
+import { MeetupsPage } from './pages/MeetupsPage.tsx';
 import { MixerPage } from './pages/MixerPage.tsx';
 import { WhitecapsPage } from './pages/WhitecapsPage.tsx';
 import { normalizePath, pageByPath } from './seo.ts';
 
 const PAGES: Record<string, () => ReactElement> = {
   '/': HomePage,
+  '/meetups-in-surrey': MeetupsPage,
   '/coworking-surrey': CoworkingPage,
   '/board-game-night-surrey': BoardGamePage,
   '/events': EventsPage,

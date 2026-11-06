@@ -243,6 +243,7 @@ assert.match(sitemap, /<lastmod>2026-11-06<\/lastmod>/);
 const llms = readFileSync(join(root, 'dist/llms.txt'), 'utf8');
 for (const url of [
   'https://f8social.club/',
+  'https://f8social.club/meetups-in-surrey',
   'https://f8social.club/coworking-surrey',
   'https://f8social.club/board-game-night-surrey',
   'https://f8social.club/events',
@@ -259,6 +260,8 @@ const homeHtml = readFileSync(join(root, 'dist/index.html'), 'utf8');
 assert.match(homeHtml, /from 30 ratings/);
 assert.equal(homeHtml.includes('24 reviews'), false);
 assert.equal(jsonLd(homeHtml).some((block) => block['@type'] === 'FAQPage'), true);
+assert.equal(visibleText(homeHtml).includes('Meetups in Surrey'), true);
+assert.match(homeHtml, /<title>Meetups in Surrey BC for Professionals \| f8 Social Club<\/title>/);
 for (const item of ssr.FAQ) {
   assert.equal(visibleText(homeHtml).includes(item.question), true, item.question);
   assert.equal(visibleText(homeHtml).includes(item.answer), true, item.question);
@@ -269,6 +272,33 @@ for (const page of ssr.PAGES) {
 }
 assert.equal(existsSync(join(root, 'dist/links/index.html')), false);
 assert.equal(existsSync(join(root, 'dist/_pages/links.html')), true);
+const meetupsHtml = readFileSync(join(root, 'dist/_pages/meetups-in-surrey.html'), 'utf8');
+assert.equal(h1Text(meetupsHtml, '/meetups-in-surrey'), 'Meetups in Surrey');
+assert.match(
+  meetupsHtml,
+  /<title>Meetups in Surrey BC \| Free Weekly Social Events \| f8 Social Club<\/title>/,
+);
+assert.equal(meetupsHtml.includes('posthog'), false);
+assert.match(meetupsHtml, /href="\/coworking-surrey"/);
+assert.match(meetupsHtml, /href="\/board-game-night-surrey"/);
+assert.match(meetupsHtml, /href="\/events"/);
+assert.match(meetupsHtml, /href="\/"/);
+assert.match(meetupsHtml, /href="https:\/\/www\.meetup\.com\/coworking-surrey-hosted-by-morantech\//);
+const meetupsBlocks = jsonLd(meetupsHtml);
+const meetupsFaq = meetupsBlocks.find((block) => block['@type'] === 'FAQPage');
+const meetupsCrumb = meetupsBlocks.find((block) => block['@type'] === 'BreadcrumbList');
+assert.ok(meetupsFaq, 'meetups FAQPage');
+assert.ok(meetupsCrumb, 'meetups BreadcrumbList');
+assert.equal(meetupsCrumb.itemListElement[1].name, 'Meetups in Surrey');
+for (const entity of meetupsFaq.mainEntity) {
+  assert.equal(visibleText(meetupsHtml).includes(entity.name), true, entity.name);
+  assert.equal(visibleText(meetupsHtml).includes(entity.acceptedAnswer.text), true, entity.name);
+}
+const renderYaml = readFileSync(join(root, 'render.yaml'), 'utf8');
+assert.match(renderYaml, /source: \/meetups-in-surrey\/\n\s+destination: \/meetups-in-surrey\n/);
+assert.match(renderYaml, /source: \/meetups-in-surrey\n\s+destination: \/_pages\/meetups-in-surrey\.html\n/);
+assert.equal(renderYaml.includes('source: /*'), false);
+assert.equal(renderYaml.includes('/_pages/*.html'), false);
 for (const file of [
   'images/board-game-night.webp',
   'images/coworking-group.webp',

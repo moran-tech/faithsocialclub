@@ -95,8 +95,8 @@ export function HomePage() {
             Make friends <span className="highlight">outside work</span> in Surrey, BC
           </h1>
           <p className="lead">
-            A social club for professionals. Free coworking on Mondays, free board games on Thursdays, and
-            good people every week.
+            <a href="/meetups-in-surrey">Meetups in Surrey</a> for professionals who want friends outside work.
+            Free coworking on Mondays, free board games on Thursdays, and good people every week.
           </p>
           <MeetupRating />
           <div className="hero__actions">
@@ -173,7 +173,15 @@ export function HomePage() {
         {FAQ.map((item) => (
           <div key={item.question}>
             <h3>{item.question}</h3>
-            <p>{item.answer}</p>
+            <p>
+              {item.answer}
+              {item.href && item.linkLabel ? (
+                <>
+                  {' '}
+                  <a href={item.href}>{item.linkLabel}</a>
+                </>
+              ) : null}
+            </p>
           </div>
         ))}
       </section>
