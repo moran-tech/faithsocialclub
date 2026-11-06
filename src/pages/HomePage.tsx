@@ -173,15 +173,7 @@ export function HomePage() {
         {FAQ.map((item) => (
           <div key={item.question}>
             <h3>{item.question}</h3>
-            <p>
-              {item.answer}
-              {item.href && item.linkLabel ? (
-                <>
-                  {' '}
-                  <a href={item.href}>{item.linkLabel}</a>
-                </>
-              ) : null}
-            </p>
+            <p>{item.answer}</p>
           </div>
         ))}
       </section>

@@ -92,23 +92,6 @@ export function MeetupsPage() {
           The rest of the month is on the <a href={eventsPage.path}>events page</a>.
         </p>
 
-        <h2 className="script">Make friends in Surrey</h2>
-        <p>
-          People looking for the best meetups in Surrey usually want a room they can return to. This social
-          club in Surrey is that: free Monday coworking, free Thursday board games, and familiar faces if you
-          come back. Come solo. You will leave knowing a few new names.
-        </p>
-
-        <h2 className="script">Meetup groups in Surrey</h2>
-        <p>
-          Looking for Meetup groups in Surrey? Ours is{' '}
-          <a href={MEETUP_URL} target="_blank" rel="noopener noreferrer">
-            Coworking Surrey, hosted by Morantech
-          </a>
-          . RSVP there for Mondays and Thursdays. Other groups post on Meetup.com too, if you want a different
-          night or a different crowd.
-        </p>
-
         <h2 className="script">Questions</h2>
         <div className="faq" id="faq">
           {MEETUPS_FAQ.map((item) => (

@@ -68,18 +68,9 @@ export function nextWeeklyWindow(day: 'Monday' | 'Thursday', now = new Date()): 
 export type FaqItem = {
   question: string;
   answer: string;
-  href?: string;
-  linkLabel?: string;
 };
 
 export const FAQ: readonly FaqItem[] = [
-  {
-    question: 'What meetups are in Surrey?',
-    answer:
-      'We host two free meetups in Surrey every week: Monday coworking, 6:30 – 8:00 PM at Chai Coffee Company, and Thursday board game night, 6:30 – 8:00 PM at Central City Mall. RSVP on Meetup.',
-    href: '/meetups-in-surrey',
-    linkLabel: 'Meetups in Surrey',
-  },
   {
     question: 'Is it free?',
     answer:
@@ -108,17 +99,17 @@ export const MEETUPS_FAQ: readonly FaqItem[] = [
       'f8 Social Club hosts two free meetups in Surrey every week for professionals. Monday coworking is 6:30 – 8:00 PM at Chai Coffee Company, 11088 126a St #100. Thursday board game night is 6:30 – 8:00 PM at the Central City Mall food court. RSVP on Meetup. Other groups also post on Meetup.com. This page is our club, not a directory of every meetup in the city.',
   },
   {
-    question: 'Where to meet people in Surrey?',
+    question: 'Where can I meet people in Surrey?',
     answer:
       'Come back to the same weekly meetup. Monday coworking at Chai Coffee Company and Thursday board games at Central City Mall are both free and start at 6:30 PM. Most people arrive alone. RSVP on Meetup so we know to expect you.',
   },
   {
-    question: 'How to meet people in Surrey?',
+    question: 'How do I meet people in Surrey?',
     answer:
       'RSVP for one night, show up, and come again the next week. Monday coworking is an hour of quiet work, then conversation. Thursday board game night starts with the rules, so you can sit down without knowing anyone. The same room each week is how names become friends.',
   },
   {
-    question: 'Where to go in Surrey today for adults?',
+    question: 'Where can adults go in Surrey today?',
     answer:
       'On Mondays, coworking at Chai Coffee Company, 6:30 – 8:00 PM. On Thursdays, board games at the Central City Mall food court, 6:30 – 8:00 PM. Both are free and meant for adults who want company after work. Other dates, including the Whitecaps watch party and the End of Year Mixer, are on the events page.',
   },
@@ -137,7 +128,7 @@ export const MEETUPS_FAQ: readonly FaqItem[] = [
       'Coworking is at Chai Coffee Company, 11088 126a St #100, Surrey. Board game night is at the Central City Mall food court, 10153 King George Blvd, Surrey. Both run 6:30 – 8:00 PM.',
   },
   {
-    question: 'What has replaced Meetup?',
+    question: 'Has anything replaced Meetup?',
     answer:
       'Nothing has replaced Meetup for this club. Meetup is still active, and it is where we RSVP for Monday coworking, Thursday board games, and the other Surrey events.',
   },
@@ -490,14 +481,14 @@ export function mapsUrl(query: string): string {
 }
 
 const homeDescription =
-  'Meetups in Surrey for professionals who want friends outside work. Free Monday coworking and Thursday board games. Come solo. RSVP on Meetup.';
+  'Free weekly coworking on Mondays and board game nights on Thursdays in Surrey, BC. Meet professionals, make friends, come solo. RSVP on Meetup.';
 
 export const home = page({
   path: '/',
   h1: 'Make friends outside work in Surrey, BC',
-  title: 'Meetups in Surrey BC for Professionals | f8 Social Club',
+  title: 'Surrey BC Social Events & Meetups | f8 Social Club',
   description: homeDescription,
-  ogTitle: 'Meetups in Surrey BC | f8 Social Club',
+  ogTitle: 'f8 Social Club: Surrey BC social events for professionals',
   jsonLd: [orgLd, faqLd],
 });
 

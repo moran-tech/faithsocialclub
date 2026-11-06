@@ -261,7 +261,10 @@ assert.match(homeHtml, /from 30 ratings/);
 assert.equal(homeHtml.includes('24 reviews'), false);
 assert.equal(jsonLd(homeHtml).some((block) => block['@type'] === 'FAQPage'), true);
 assert.equal(visibleText(homeHtml).includes('Meetups in Surrey'), true);
-assert.match(homeHtml, /<title>Meetups in Surrey BC for Professionals \| f8 Social Club<\/title>/);
+assert.match(homeHtml, /<title>Surrey BC Social Events &amp; Meetups \| f8 Social Club<\/title>/);
+assert.equal(homeHtml.includes('content="Meetups in Surrey'), false);
+assert.equal(visibleText(homeHtml).includes('What meetups are in Surrey?'), false);
+assert.equal(visibleText(homeHtml).includes('best meetups in Surrey'), false);
 for (const item of ssr.FAQ) {
   assert.equal(visibleText(homeHtml).includes(item.question), true, item.question);
   assert.equal(visibleText(homeHtml).includes(item.answer), true, item.question);
@@ -279,6 +282,9 @@ assert.match(
   /<title>Meetups in Surrey BC \| Free Weekly Social Events \| f8 Social Club<\/title>/,
 );
 assert.equal(meetupsHtml.includes('posthog'), false);
+assert.equal(meetupsHtml.includes('best meetups in Surrey'), false);
+assert.equal(meetupsHtml.includes('Meetup groups in Surrey'), false);
+assert.equal(meetupsHtml.includes('Looking for Meetup groups'), false);
 assert.match(meetupsHtml, /href="\/coworking-surrey"/);
 assert.match(meetupsHtml, /href="\/board-game-night-surrey"/);
 assert.match(meetupsHtml, /href="\/events"/);
