@@ -1,4 +1,5 @@
 import { MeetupRating, Related } from '../components/ui.tsx';
+import { INSTAGRAM_URL, MEETUP_URL } from '../config.ts';
 import { about, board, coworking, eventsPage } from '../seo.ts';
 
 export function AboutPage() {
@@ -24,6 +25,13 @@ export function AboutPage() {
         </p>
         <h2 className="script">Faith Morante</h2>
         <p>Faith Morante hosts f8 Social Club for Professionals. She is the founder of the club.</p>
+        <p>
+          <a href={MEETUP_URL} target="_blank" rel="noopener noreferrer">
+            Meetup
+          </a>
+          {' · '}
+          <a href={INSTAGRAM_URL}>Instagram @socialclub.pros</a>
+        </p>
         <h2 className="script">From the meetups</h2>
         <div className="event__photos">
           <img

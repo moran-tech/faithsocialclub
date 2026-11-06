@@ -1,0 +1,55 @@
+# Trailing-slash redirects for the existing f8social.club static site.
+#
+# Render serves a real file before it applies a route, so path/index.html would
+# keep /path/ as a second 200. This build publishes each clean URL as
+# dist/_pages/<path>.html and does not publish those directory indexes.
+# The homepage stays dist/index.html. /end-of-year-mixer-sponsors/ still has
+# its own index.html, so its trailing slash is not redirected.
+#
+# If f8social.club already exists in Render, copy `routes` and `headers` onto
+# that service. Do not sync this file as a second static site, and do not move
+# the f8social.club domain onto a new service.
+# Add the rules before the deploy that removes the old directory indexes.
+# Until the rewrite is live, /coworking-surrey and the other clean URLs 404.
+
+services:
+  - type: web
+    runtime: static
+    name: f8social
+    buildCommand: npm install; npm run build
+    staticPublishPath: dist
+    envVars:
+      - key: VITE_SUBSCRIBE_API_URL
+        value: https://fireplace-waitlist.onrender.com/f8social/subscribe
+    routes:
+      - type: redirect
+        source: /coworking-surrey/
+        destination: /coworking-surrey
+      - type: redirect
+        source: /board-game-night-surrey/
+        destination: /board-game-night-surrey
+      - type: redirect
+        source: /events/
+        destination: /events
+      - type: redirect
+        source: /events/whitecaps-watch-party-2026-11-07/
+        destination: /events/whitecaps-watch-party-2026-11-07
+      - type: redirect
+        source: /events/end-of-year-mixer-2026-12-05/
+        destination: /events/end-of-year-mixer-2026-12-05
+      - type: redirect
+        source: /about/
+        destination: /about
+      - type: redirect
+        source: /links/
+        destination: /links
+      - type: redirect
+        source: /*/
+        destination: /*
+      - type: rewrite
+        source: /*
+        destination: /_pages/*.html
+    headers:
+      - path: /_pages/*
+        name: X-Robots-Tag
+        value: noindex

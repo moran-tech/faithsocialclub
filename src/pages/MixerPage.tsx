@@ -1,4 +1,5 @@
 import { Facts, Related, Rsvp, VenueLink } from '../components/ui.tsx';
+import { COWORKING_CONVERSATION } from '../config.ts';
 import { board, coworking, eventsPage, mixer } from '../seo.ts';
 
 export function MixerPage() {
@@ -18,6 +19,15 @@ export function MixerPage() {
       </section>
       <section>
         <h2 className="script">The evening</h2>
+        <figure className="event-figure">
+          <img
+            src={COWORKING_CONVERSATION.src}
+            alt={COWORKING_CONVERSATION.alt}
+            width={COWORKING_CONVERSATION.width}
+            height={COWORKING_CONVERSATION.height}
+          />
+          <figcaption className="photo-caption">Members at a recent Monday coworking meetup.</figcaption>
+        </figure>
         <Facts
           items={[
             { term: 'When', detail: `${mixer.when}, ${mixer.time}` },

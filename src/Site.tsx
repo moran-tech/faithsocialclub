@@ -1,6 +1,5 @@
 import { useEffect, type ReactElement } from 'react';
 import { Layout } from './components/Layout.tsx';
-import { JsonLd } from './components/ui.tsx';
 import { AboutPage } from './pages/AboutPage.tsx';
 import { BoardGamePage } from './pages/BoardGamePage.tsx';
 import { CoworkingPage } from './pages/CoworkingPage.tsx';
@@ -20,19 +19,28 @@ const PAGES: Record<string, () => ReactElement> = {
   '/about': AboutPage,
 };
 
+function setContent(selector: string, value: string) {
+  document.querySelector(selector)?.setAttribute('content', value);
+}
+
 function usePageMeta(path: string) {
   useEffect(() => {
     const page = pageByPath(path);
     if (!page) return;
     document.title = page.title;
-    document.querySelector('meta[name="description"]')?.setAttribute('content', page.description);
+    setContent('meta[name="description"]', page.description);
     const canonical = document.querySelector<HTMLLinkElement>('link[rel="canonical"]');
     if (canonical) canonical.href = page.canonical;
-    document.querySelector('meta[property="og:url"]')?.setAttribute('content', page.canonical);
-    document.querySelector('meta[property="og:title"]')?.setAttribute('content', page.ogTitle);
-    document.querySelector('meta[property="og:description"]')?.setAttribute('content', page.description);
-    document.querySelector('meta[name="twitter:description"]')?.setAttribute('content', page.description);
-    document.querySelector('meta[property="og:image"]')?.setAttribute('content', 'https://f8social.club/og.jpg');
+    setContent('meta[property="og:url"]', page.canonical);
+    setContent('meta[property="og:title"]', page.ogTitle);
+    setContent('meta[property="og:description"]', page.description);
+    setContent('meta[property="og:image"]', page.image.url);
+    setContent('meta[property="og:image:width"]', String(page.image.width));
+    setContent('meta[property="og:image:height"]', String(page.image.height));
+    setContent('meta[property="og:image:alt"]', page.image.alt);
+    setContent('meta[name="twitter:title"]', page.ogTitle);
+    setContent('meta[name="twitter:description"]', page.description);
+    setContent('meta[name="twitter:image"]', page.image.url);
   }, [path]);
 }
 
@@ -46,7 +54,6 @@ export function Site({ path }: { path: string }) {
   return (
     <Layout path={normal}>
       <Page />
-      {seo.jsonLd ? <JsonLd data={seo.jsonLd} /> : null}
     </Layout>
   );
 }

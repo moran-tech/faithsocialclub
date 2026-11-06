@@ -1,7 +1,7 @@
 import { NewsletterForm } from '../NewsletterForm.tsx';
 import { EVENTS, MEETUP_URL, type ClubEvent } from '../config.ts';
 import { MeetupRating, Rsvp, VenueLink } from '../components/ui.tsx';
-import { board, coworking, mixer, whitecaps, type DatedEventPage, type EventPage } from '../seo.ts';
+import { FAQ, board, coworking, mixer, whitecaps, type DatedEventPage, type EventPage } from '../seo.ts';
 
 const seriesById = {
   coworking,
@@ -170,25 +170,12 @@ export function HomePage() {
 
       <section className="faq" id="faq">
         <h2 className="script">Questions</h2>
-        <h3>Is it free?</h3>
-        <p>
-          Monday coworking, Thursday board game night, and the Whitecaps watch party are free. RSVP on
-          Meetup. Food and drinks at the watch party are ordered from the restaurant. The End of Year Mixer
-          is $35 early bird or $45 regular.
-        </p>
-        <h3>Do I need to know the games?</h3>
-        <p>
-          No. We explain the rules first. Games include Wavelength, Catch the Vibe, Avalon, Sushi Go, Spyfall,
-          and Codenames.
-        </p>
-        <h3>Can I come alone?</h3>
-        <p>Yes. Most people come solo, and bringing a friend is welcome too.</p>
-        <h3>Where do I park?</h3>
-        <p>
-          The club does not reserve parking. Coworking is at Chai Coffee Company, 11088 126a St #100, Surrey.
-          Board game night is at the Central City Mall food court, 10153 King George Blvd, Surrey. Use the
-          map link on the event page for the address.
-        </p>
+        {FAQ.map((item) => (
+          <div key={item.question}>
+            <h3>{item.question}</h3>
+            <p>{item.answer}</p>
+          </div>
+        ))}
       </section>
 
       <section className="cta">

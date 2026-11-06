@@ -17,7 +17,7 @@ export function MeetupRating() {
       <a href={MEETUP_URL} target="_blank" rel="noopener noreferrer">
         5.0 on Meetup
       </a>{' '}
-      from 24 reviews.
+      from 30 ratings.
     </p>
   );
 }
@@ -55,11 +55,3 @@ export function Related({ links }: { links: { href: string; label: string }[] })
   );
 }
 
-export function JsonLd({ data }: { data: object }) {
-  return (
-    <script
-      type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(data, null, 2).replaceAll('<', '\\u003c') }}
-    />
-  );
-}

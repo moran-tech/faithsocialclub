@@ -1,4 +1,11 @@
-import { INSTAGRAM_URL, MEETUP_URL } from './config.ts';
+import {
+  COWORKING_CONVERSATION,
+  COWORKING_LONG_TABLE,
+  COWORKING_SIDE_TABLE,
+  EXTRA_COWORKING_PHOTOS,
+  INSTAGRAM_URL,
+  MEETUP_URL,
+} from './config.ts';
 
 const ORIGIN = 'https://f8social.club';
 const ORG_ID = `${ORIGIN}/#org`;
@@ -6,6 +13,79 @@ const ORG_ID = `${ORIGIN}/#org`;
 const OG_IMAGE = `${ORIGIN}/og.jpg`;
 const OG_IMAGE_ALT =
   'Social Club for Professionals in Surrey, BC: board games, coworking, real connections';
+
+// BC is on Pacific Time year-round at UTC-7. America/Vancouver in IANA data can
+// still report UTC-8 in winter, so the civil clock here uses a fixed -07:00 offset.
+const PACIFIC_OFFSET_MS = 7 * 60 * 60 * 1000;
+
+export type ShareImage = {
+  url: string;
+  width: number;
+  height: number;
+  alt: string;
+};
+
+const DEFAULT_IMAGE: ShareImage = {
+  url: OG_IMAGE,
+  width: 1200,
+  height: 675,
+  alt: OG_IMAGE_ALT,
+};
+
+function absolute(src: string): string {
+  return `${ORIGIN}${src}`;
+}
+
+function shareImage(src: string, alt: string): ShareImage {
+  return { url: absolute(src), width: 1200, height: 675, alt };
+}
+
+const coworkingShare = shareImage(
+  '/images/coworking-side-table-og.webp',
+  COWORKING_SIDE_TABLE.alt,
+);
+const whitecapsShare = shareImage('/images/coworking-long-table-og.webp', COWORKING_LONG_TABLE.alt);
+const mixerShare = shareImage('/images/coworking-conversation-og.webp', COWORKING_CONVERSATION.alt);
+
+export function nextWeeklyWindow(day: 'Monday' | 'Thursday', now = new Date()): {
+  startDate: string;
+  endDate: string;
+} {
+  const target = day === 'Monday' ? 1 : 4;
+  const shifted = new Date(now.getTime() - PACIFIC_OFFSET_MS);
+  const weekday = shifted.getUTCDay();
+  const minutes = shifted.getUTCHours() * 60 + shifted.getUTCMinutes();
+  let delta = (target - weekday + 7) % 7;
+  if (delta === 0 && minutes >= 20 * 60) delta = 7;
+  const next = new Date(Date.UTC(shifted.getUTCFullYear(), shifted.getUTCMonth(), shifted.getUTCDate() + delta));
+  const date = next.toISOString().slice(0, 10);
+  return {
+    startDate: `${date}T18:30:00-07:00`,
+    endDate: `${date}T20:00:00-07:00`,
+  };
+}
+
+export const FAQ = [
+  {
+    question: 'Is it free?',
+    answer:
+      'Monday coworking, Thursday board game night, and the Whitecaps watch party are free. RSVP on Meetup. Food and drinks at the watch party are ordered from the restaurant. The End of Year Mixer is $35 early bird or $45 regular.',
+  },
+  {
+    question: 'Do I need to know the games?',
+    answer:
+      'No. We explain the rules first. Games include Wavelength, Catch the Vibe, Avalon, Sushi Go, Spyfall, and Codenames.',
+  },
+  {
+    question: 'Can I come alone?',
+    answer: 'Yes. Most people come solo, and bringing a friend is welcome too.',
+  },
+  {
+    question: 'Where do I park?',
+    answer:
+      'The club does not reserve parking. Coworking is at Chai Coffee Company, 11088 126a St #100, Surrey. Board game night is at the Central City Mall food court, 10153 King George Blvd, Surrey. Use the map link on the event page for the address.',
+  },
+] as const;
 
 export const MEETUP_EVENTS = {
   coworking: 'https://www.meetup.com/coworking-surrey-hosted-by-morantech/events/zqvrbvyjcpbmb/',
@@ -79,6 +159,9 @@ function weeklySchedule(day: 'Monday' | 'Thursday') {
   };
 }
 
+const mondayWindow = nextWeeklyWindow('Monday');
+const thursdayWindow = nextWeeklyWindow('Thursday');
+
 const coworkingLd = {
   '@context': 'https://schema.org',
   '@type': 'Event',
@@ -86,6 +169,8 @@ const coworkingLd = {
   description:
     'Free weekly coworking for builders, creators, freelancers and founders. Say your goal, do an hour of deep work, then network.',
   eventSchedule: weeklySchedule('Monday'),
+  startDate: mondayWindow.startDate,
+  endDate: mondayWindow.endDate,
   eventStatus: 'https://schema.org/EventScheduled',
   eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
   isAccessibleForFree: true,
@@ -101,7 +186,11 @@ const coworkingLd = {
       addressCountry: 'CA',
     },
   },
-  image: [`${ORIGIN}/images/coworking-group.webp`, `${ORIGIN}/images/coworking-laptops.webp`],
+  image: [
+    `${ORIGIN}/images/coworking-group.webp`,
+    `${ORIGIN}/images/coworking-laptops.webp`,
+    ...EXTRA_COWORKING_PHOTOS.map((photo) => absolute(photo.src)),
+  ],
   offers: {
     '@type': 'Offer',
     price: 0,
@@ -119,6 +208,8 @@ const boardLd = {
   description:
     'A relaxed night of party and strategy games like Wavelength, Catch the Vibe, Avalon, Sushi Go, Spyfall and Codenames. No experience needed; come solo or bring a friend.',
   eventSchedule: weeklySchedule('Thursday'),
+  startDate: thursdayWindow.startDate,
+  endDate: thursdayWindow.endDate,
   eventStatus: 'https://schema.org/EventScheduled',
   eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
   isAccessibleForFree: true,
@@ -145,7 +236,6 @@ const boardLd = {
   organizer,
 };
 
-// No Whitecaps photo exists. The extra café photos are coworking, so this event has no image.
 const whitecapsLd = {
   '@context': 'https://schema.org',
   '@type': 'Event',
@@ -167,6 +257,7 @@ const whitecapsLd = {
       addressCountry: 'CA',
     },
   },
+  image: [whitecapsShare.url, absolute(COWORKING_LONG_TABLE.src)],
   offers: {
     '@type': 'Offer',
     price: 0,
@@ -177,7 +268,6 @@ const whitecapsLd = {
   organizer,
 };
 
-// No mixer photo exists. Left out rather than reuse a coworking or board-game photo.
 const partyLd = {
   '@context': 'https://schema.org',
   '@type': 'Event',
@@ -200,6 +290,7 @@ const partyLd = {
       addressCountry: 'CA',
     },
   },
+  image: [mixerShare.url, absolute(COWORKING_CONVERSATION.src)],
   performer: { '@type': 'Person', name: 'DJ AJ' },
   offers: [
     {
@@ -222,6 +313,8 @@ const partyLd = {
   organizer,
 };
 
+export type JsonLd = Record<string, unknown>;
+
 export type PageSeo = {
   path: string;
   h1: string;
@@ -229,7 +322,8 @@ export type PageSeo = {
   description: string;
   canonical: string;
   ogTitle: string;
-  jsonLd?: object;
+  image: ShareImage;
+  jsonLd?: JsonLd | JsonLd[];
 };
 
 export type EventPage = PageSeo & {
@@ -252,14 +346,70 @@ function canonicalFor(path: string): string {
 }
 
 function page(
-  entry: Omit<PageSeo, 'canonical' | 'ogTitle'> & { ogTitle?: string },
+  entry: Omit<PageSeo, 'canonical' | 'ogTitle' | 'image'> & { ogTitle?: string; image?: ShareImage },
 ): PageSeo {
   return {
     ...entry,
     canonical: canonicalFor(entry.path),
     ogTitle: entry.ogTitle ?? entry.title,
+    image: entry.image ?? DEFAULT_IMAGE,
   };
 }
+
+function eventNode(ld: { '@context': string; name: string }): JsonLd {
+  const { '@context': _context, ...rest } = ld;
+  return rest;
+}
+
+const faqLd: JsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: FAQ.map((item) => ({
+    '@type': 'Question',
+    name: item.question,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: item.answer,
+    },
+  })),
+};
+
+const eventsListLd: JsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: 'Surrey Events This Month',
+  itemListElement: [
+    { url: canonicalFor('/coworking-surrey'), event: coworkingLd },
+    { url: canonicalFor('/board-game-night-surrey'), event: boardLd },
+    { url: canonicalFor('/events/whitecaps-watch-party-2026-11-07'), event: whitecapsLd },
+    { url: canonicalFor('/events/end-of-year-mixer-2026-12-05'), event: partyLd },
+  ].map((entry, index) => ({
+    '@type': 'ListItem',
+    position: index + 1,
+    url: entry.url,
+    name: entry.event.name,
+    item: eventNode(entry.event),
+  })),
+};
+
+const eventsCrumbLd: JsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: `${ORIGIN}/` },
+    { '@type': 'ListItem', position: 2, name: 'Events', item: canonicalFor('/events') },
+  ],
+};
+
+const faithLd: JsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: 'Faith Morante',
+  url: canonicalFor('/about'),
+  description: 'Faith Morante hosts f8 Social Club for Professionals. She is the founder of the club.',
+  sameAs: [MEETUP_URL, INSTAGRAM_URL],
+  worksFor: { '@id': ORG_ID },
+};
 
 function addressLine(place: { name: string; street: string; locality: string; region: string; postal?: string }): string {
   const tail = place.postal ? `${place.region} ${place.postal}` : place.region;
@@ -279,7 +429,7 @@ export const home = page({
   title: 'Surrey BC Social Events & Meetups | f8 Social Club',
   description: homeDescription,
   ogTitle: 'f8 Social Club: Surrey BC social events for professionals',
-  jsonLd: orgLd,
+  jsonLd: [orgLd, faqLd],
 });
 
 export const coworking: EventPage = {
@@ -289,6 +439,7 @@ export const coworking: EventPage = {
     title: 'Free Coworking in Surrey BC, Mondays 6:30 PM | f8 Social Club',
     description:
       'Bring your laptop to Chai Coffee Company every Monday at 6:30 PM. Set a goal, do an hour of deep work, then meet other builders and creators. Free.',
+    image: coworkingShare,
     jsonLd: coworkingLd,
   }),
   schedule: 'Every Monday, 6:30 PM',
@@ -324,6 +475,7 @@ export const eventsPage = page({
   title: 'Surrey BC Events This Month | f8 Social Club',
   description:
     'Upcoming coworking, board game nights, watch parties and mixers for professionals in Surrey, BC.',
+  jsonLd: [eventsListLd, eventsCrumbLd],
 });
 
 export const whitecaps: DatedEventPage = {
@@ -333,6 +485,7 @@ export const whitecaps: DatedEventPage = {
     title: 'Whitecaps Watch Party in Surrey, Nov 7 | f8 Social Club',
     description:
       'Watch Whitecaps vs CF Montréal on MLS Decision Day at Browns Socialhouse Surrey Centre, Sat Nov 7 at 2 PM. Free entry.',
+    image: whitecapsShare,
     jsonLd: whitecapsLd,
   }),
   schedule: 'Saturday, November 7, 2026',
@@ -353,6 +506,7 @@ export const mixer: DatedEventPage = {
     title: 'End of Year Mixer in Surrey, Dec 5 feat. DJ AJ | f8 Social Club',
     description:
       'Close out 2026 at Studio Nazrana, Surrey: welcome drink, dinner, icebreakers and dancing with DJ AJ. Sat Dec 5, 6:30 PM. Early bird $35.',
+    image: mixerShare,
     jsonLd: partyLd,
   }),
   schedule: 'Saturday, December 5, 2026',
@@ -373,7 +527,7 @@ export const about = page({
   title: 'About f8 Social Club | Surrey BC',
   description:
     'Faith Morante hosts f8 Social Club for professionals in Surrey, BC. Free coworking every Monday and board game night every Thursday. Come solo.',
-  jsonLd: orgLd,
+  jsonLd: [orgLd, faithLd],
 });
 
 export const PAGES: PageSeo[] = [home, coworking, board, eventsPage, whitecaps, mixer, about];
@@ -402,7 +556,16 @@ function esc(value: string): string {
   return value.replaceAll('&', '&amp;').replaceAll('"', '&quot;').replaceAll('<', '&lt;');
 }
 
+export function jsonLdBlocks(entry: { jsonLd?: JsonLd | JsonLd[] }): JsonLd[] {
+  if (!entry.jsonLd) return [];
+  return Array.isArray(entry.jsonLd) ? entry.jsonLd : [entry.jsonLd];
+}
+
 export function renderHead(entry: PageSeo): string {
+  const scripts = jsonLdBlocks(entry).map(
+    (block) =>
+      `<script type="application/ld+json">${JSON.stringify(block).replaceAll('<', '\\u003c')}</script>`,
+  );
   return [
     `<title>${esc(entry.title)}</title>`,
     `<meta name="description" content="${esc(entry.description)}" />`,
@@ -411,13 +574,16 @@ export function renderHead(entry: PageSeo): string {
     `<meta property="og:url" content="${esc(entry.canonical)}" />`,
     `<meta property="og:title" content="${esc(entry.ogTitle)}" />`,
     `<meta property="og:description" content="${esc(entry.description)}" />`,
-    `<meta property="og:image" content="${OG_IMAGE}" />`,
-    `<meta property="og:image:width" content="1200" />`,
-    `<meta property="og:image:height" content="675" />`,
-    `<meta property="og:image:alt" content="${esc(OG_IMAGE_ALT)}" />`,
+    `<meta property="og:image" content="${esc(entry.image.url)}" />`,
+    `<meta property="og:image:width" content="${entry.image.width}" />`,
+    `<meta property="og:image:height" content="${entry.image.height}" />`,
+    `<meta property="og:image:alt" content="${esc(entry.image.alt)}" />`,
     `<meta property="og:site_name" content="f8 Social Club" />`,
     `<meta property="og:locale" content="en_CA" />`,
     `<meta name="twitter:card" content="summary_large_image" />`,
+    `<meta name="twitter:title" content="${esc(entry.ogTitle)}" />`,
     `<meta name="twitter:description" content="${esc(entry.description)}" />`,
+    `<meta name="twitter:image" content="${esc(entry.image.url)}" />`,
+    ...scripts,
   ].join('\n');
 }

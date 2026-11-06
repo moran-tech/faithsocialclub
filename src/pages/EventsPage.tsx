@@ -4,6 +4,11 @@ export function EventsPage() {
   return (
     <main>
       <section className="page-intro">
+        <nav className="crumbs" aria-label="Breadcrumb">
+          <a href="/">Home</a>
+          <span aria-hidden="true"> / </span>
+          <span aria-current="page">Events</span>
+        </nav>
         <p className="eyebrow">Surrey, BC</p>
         <h1 className="script">{eventsPage.h1}</h1>
         <p className="lead">{eventsPage.description}</p>

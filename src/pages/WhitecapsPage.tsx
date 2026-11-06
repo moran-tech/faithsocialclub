@@ -1,4 +1,5 @@
 import { Facts, Related, Rsvp, VenueLink } from '../components/ui.tsx';
+import { COWORKING_LONG_TABLE } from '../config.ts';
 import { board, coworking, eventsPage, whitecaps } from '../seo.ts';
 
 export function WhitecapsPage() {
@@ -18,6 +19,15 @@ export function WhitecapsPage() {
       </section>
       <section>
         <h2 className="script">Whitecaps vs CF Montréal</h2>
+        <figure className="event-figure">
+          <img
+            src={COWORKING_LONG_TABLE.src}
+            alt={COWORKING_LONG_TABLE.alt}
+            width={COWORKING_LONG_TABLE.width}
+            height={COWORKING_LONG_TABLE.height}
+          />
+          <figcaption className="photo-caption">Members at a recent Monday coworking meetup.</figcaption>
+        </figure>
         <Facts
           items={[
             { term: 'When', detail: `${whitecaps.when}, ${whitecaps.time}` },
