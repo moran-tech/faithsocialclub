@@ -1,4 +1,5 @@
 import { Facts, Related, Rsvp, VenueLink } from '../components/ui.tsx';
+import { EXTRA_COWORKING_PHOTOS } from '../config.ts';
 import { board, coworking, eventsPage } from '../seo.ts';
 
 export function CoworkingPage() {
@@ -49,6 +50,11 @@ export function CoworkingPage() {
             height={1600}
             alt="People working on laptops around a café table during Monday coworking, with the kitchen and menu boards behind them"
           />
+        </div>
+        <div className="event__gallery">
+          {EXTRA_COWORKING_PHOTOS.map((photo) => (
+            <img key={photo.src} src={photo.src} alt={photo.alt} width={photo.width} height={photo.height} loading="lazy" />
+          ))}
         </div>
         <Related
           links={[

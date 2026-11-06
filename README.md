@@ -29,15 +29,26 @@ It reads weekly `EVENTS` from `src/config.ts` and adds one-off events in
 homepage.
 
 Vite's multi-page inputs build `dist/index.html` and `dist/links/index.html`.
-`npm run build` then pre-renders each public route to its own `index.html`, so the
-first response already contains the title, copy, and JSON-LD. With Render's publish
-directory set to `dist`, `/coworking-surrey` and `/links` resolve to that directory's
-`index.html` (also as a trailing slash or `index.html`). Do not add a catch-all
-rewrite to `/index.html`; unknown paths should stay 404s.
+`npm run build` then pre-renders each public route. `/` stays `dist/index.html`.
+Every other route is written to `dist/_pages/<path>.html` (including `/links`),
+and the old `path/index.html` copies are not published. That lets Render 301
+`/path/` to `/path`. The rewrite and redirect rules live in `render.yaml`. Copy
+them onto the existing static site before deploying this layout. Do not add a
+catch-all rewrite to `/index.html`; unknown paths should stay 404s.
+
+`/end-of-year-mixer-sponsors/` keeps its directory `index.html` because GitHub
+Pages publishes that folder. Render will not 301 a path that is a real file.
+
+Weekly coworking and board game JSON-LD include `eventSchedule` plus the next
+Monday or Thursday `startDate` and `endDate` in `America/Vancouver` at `-07:00`.
+Those two timestamps are calculated when the site is built. Rebuild after they
+pass so the next occurrence stays current. Visible copy still says "every Monday"
+and "every Thursday".
 
 Routes: `/`, `/coworking-surrey`, `/board-game-night-surrey`, `/events`,
 `/events/whitecaps-watch-party-2026-11-07`, `/events/end-of-year-mixer-2026-12-05`,
-`/about`, and `/links`. `public/robots.txt` and `public/sitemap.xml` are copied into `dist`.
+`/about`, `/links`, and `/end-of-year-mixer-sponsors`. `public/robots.txt`,
+`public/sitemap.xml`, and `public/llms.txt` are copied into `dist`.
 
 Use Node 20.19+ or 22.12+ for the current Vite version.
 
@@ -60,5 +71,7 @@ Images live in `public/images/` (resized from the originals in `../social club/`
 ## Deploy on Render
 
 Static site: build `npm install; npm run build`, publish path `dist`. The custom domain is f8social.club.
+
+Redirects and rewrites (also in `render.yaml`): 301 each trailing-slash URL to the slashless path, then rewrite slashless paths to `/_pages/*.html`. Add `X-Robots-Tag: noindex` on `/_pages/*`. Apply those rules on the existing service in the same deploy as this build. Without the rewrite, clean URLs 404.
 
 Set `VITE_SUBSCRIBE_API_URL` to `https://fireplace-waitlist.onrender.com/f8social/subscribe` before that build.

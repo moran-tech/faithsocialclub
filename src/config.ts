@@ -27,6 +27,36 @@ export type ClubEvent = {
   accent: EventAccent;
 };
 
+export const COWORKING_LONG_TABLE: EventPhoto = {
+  src: '/images/coworking-long-table.webp',
+  alt: 'People working on laptops along a long café table during Monday coworking, with coffee and the café counter behind them',
+  width: 900,
+  height: 1600,
+  orientation: 'portrait',
+};
+
+export const COWORKING_CONVERSATION: EventPhoto = {
+  src: '/images/coworking-conversation.webp',
+  alt: 'Coworking group talking and working on laptops at a café table',
+  width: 900,
+  height: 1600,
+  orientation: 'portrait',
+};
+
+export const COWORKING_SIDE_TABLE: EventPhoto = {
+  src: '/images/coworking-side-table.webp',
+  alt: 'Two people working on laptops at a café table during Monday coworking, with other members at tables behind them',
+  width: 900,
+  height: 1600,
+  orientation: 'portrait',
+};
+
+export const EXTRA_COWORKING_PHOTOS: EventPhoto[] = [
+  COWORKING_LONG_TABLE,
+  COWORKING_CONVERSATION,
+  COWORKING_SIDE_TABLE,
+];
+
 export const EVENTS: ClubEvent[] = [
   {
     id: 'coworking',

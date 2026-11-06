@@ -28,8 +28,21 @@ function seoRoutes(): Plugin {
   return {
     name: 'seo-routes',
     configureServer(server) {
-      server.middlewares.use((req, _res, next) => {
-        const route = requestPath(req.url);
+      server.middlewares.use((req, res, next) => {
+        const url = req.url ?? '';
+        const q = url.indexOf('?');
+        const path = q === -1 ? url : url.slice(0, q);
+        const query = q === -1 ? '' : url.slice(q);
+        if (path.length > 1 && path.endsWith('/')) {
+          const bare = path.slice(0, -1);
+          if (SEO_DEV_ROUTES.includes(bare) || bare === '/links') {
+            res.statusCode = 301;
+            res.setHeader('Location', `${bare}${query}`);
+            res.end();
+            return;
+          }
+        }
+        const route = requestPath(url);
         if (!route) return next();
         if (SEO_DEV_ROUTES.includes(route.bare)) {
           req.url = `/index.html${route.query}`;
@@ -42,9 +55,28 @@ function seoRoutes(): Plugin {
     },
     configurePreviewServer(server) {
       const dist = join(server.config.root, server.config.build.outDir);
-      server.middlewares.use((req, _res, next) => {
-        const route = requestPath(req.url);
+      server.middlewares.use((req, res, next) => {
+        const url = req.url ?? '';
+        const q = url.indexOf('?');
+        const path = q === -1 ? url : url.slice(0, q);
+        const query = q === -1 ? '' : url.slice(q);
+        if (path.length > 1 && path.endsWith('/')) {
+          const bare = path.slice(0, -1);
+          const page = join(dist, '_pages', `${bare.slice(1)}.html`);
+          if (existsSync(page)) {
+            res.statusCode = 301;
+            res.setHeader('Location', `${bare}${query}`);
+            res.end();
+            return;
+          }
+        }
+        const route = requestPath(url);
         if (!route) return next();
+        const page = join(dist, '_pages', `${route.bare.slice(1)}.html`);
+        if (existsSync(page)) {
+          req.url = `/_pages${route.bare}.html${route.query}`;
+          return next();
+        }
         const indexFile = join(dist, route.bare.slice(1), 'index.html');
         if (existsSync(indexFile)) req.url = `${route.bare}/index.html${route.query}`;
         next();
