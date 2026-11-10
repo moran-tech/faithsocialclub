@@ -1,5 +1,4 @@
 import {
-  COWORKING_CONVERSATION,
   COWORKING_LONG_TABLE,
   COWORKING_SIDE_TABLE,
   EXTRA_COWORKING_PHOTOS,
@@ -45,7 +44,6 @@ const coworkingShare = shareImage(
   COWORKING_SIDE_TABLE.alt,
 );
 const whitecapsShare = shareImage('/images/coworking-long-table-og.webp', COWORKING_LONG_TABLE.alt);
-const mixerShare = shareImage('/images/coworking-conversation-og.webp', COWORKING_CONVERSATION.alt);
 
 export function nextWeeklyWindow(day: 'Monday' | 'Thursday', now = new Date()): {
   startDate: string;
@@ -74,7 +72,7 @@ export const FAQ: readonly FaqItem[] = [
   {
     question: 'Is it free?',
     answer:
-      'Monday coworking, Thursday board game night, and the Whitecaps watch party are free. RSVP on Meetup. Food and drinks at the watch party are ordered from the restaurant. The End of Year Mixer is $35 early bird or $45 regular.',
+      'Monday coworking, Thursday board game night, and the Whitecaps watch party are free. RSVP on Meetup. Food and drinks at the watch party are ordered from the restaurant.',
   },
   {
     question: 'Do I need to know the games?',
@@ -111,12 +109,12 @@ export const MEETUPS_FAQ: readonly FaqItem[] = [
   {
     question: 'Where can adults go in Surrey today?',
     answer:
-      'On Mondays, coworking at Chai Coffee Company, 6:30 – 8:00 PM. On Thursdays, board games at the Central City Mall food court, 6:30 – 8:00 PM. Both are free and meant for adults who want company after work. Other dates, including the Whitecaps watch party and the End of Year Mixer, are on the events page.',
+      'On Mondays, coworking at Chai Coffee Company, 6:30 – 8:00 PM. On Thursdays, board games at the Central City Mall food court, 6:30 – 8:00 PM. Both are free and meant for adults who want company after work. Other dates, including the Whitecaps watch party, are on the events page.',
   },
   {
     question: 'Are the meetups free?',
     answer:
-      'Yes. Monday coworking and Thursday board game night are free. RSVP on Meetup. The Whitecaps watch party is free entry, and food and drinks are ordered from the restaurant. The End of Year Mixer is $35 early bird or $45 regular.',
+      'Yes. Monday coworking and Thursday board game night are free. RSVP on Meetup. The Whitecaps watch party is free entry, and food and drinks are ordered from the restaurant.',
   },
   {
     question: 'Can I come alone?',
@@ -138,7 +136,6 @@ export const MEETUP_EVENTS = {
   coworking: 'https://www.meetup.com/coworking-surrey-hosted-by-morantech/events/zqvrbvyjcpbmb/',
   board: 'https://www.meetup.com/coworking-surrey-hosted-by-morantech/events/317209890/',
   whitecaps: 'https://www.meetup.com/coworking-surrey-hosted-by-morantech/events/317166913/',
-  mixer: 'https://www.meetup.com/coworking-surrey-hosted-by-morantech/events/317095315/',
 } as const;
 
 const organizer = {
@@ -185,14 +182,6 @@ const browns = {
   street: '9666 King George Blvd A1',
   locality: 'Surrey',
   region: 'BC',
-};
-
-const nazrana = {
-  name: 'Studio Nazrana',
-  street: '13140 80 Ave',
-  locality: 'Surrey',
-  region: 'BC',
-  postal: 'V3W 3B2',
 };
 
 function weeklySchedule(day: 'Monday' | 'Thursday') {
@@ -315,51 +304,6 @@ const whitecapsLd = {
   organizer,
 };
 
-const partyLd = {
-  '@context': 'https://schema.org',
-  '@type': 'Event',
-  name: 'End of Year Mixer for Surrey Professionals feat. DJ AJ',
-  description:
-    'Close out 2026 with good people, good music and good food: welcome drink, icebreakers, dinner, then mingling and dancing.',
-  startDate: '2026-12-05T18:30:00-07:00',
-  endDate: '2026-12-05T21:00:00-07:00',
-  eventStatus: 'https://schema.org/EventScheduled',
-  eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
-  location: {
-    '@type': 'Place',
-    name: nazrana.name,
-    address: {
-      '@type': 'PostalAddress',
-      streetAddress: nazrana.street,
-      addressLocality: nazrana.locality,
-      addressRegion: nazrana.region,
-      postalCode: nazrana.postal,
-      addressCountry: 'CA',
-    },
-  },
-  image: [mixerShare.url, absolute(COWORKING_CONVERSATION.src)],
-  performer: { '@type': 'Person', name: 'DJ AJ' },
-  offers: [
-    {
-      '@type': 'Offer',
-      name: 'Early bird',
-      price: 35,
-      priceCurrency: 'CAD',
-      availability: 'https://schema.org/InStock',
-      url: MEETUP_EVENTS.mixer,
-    },
-    {
-      '@type': 'Offer',
-      name: 'Regular',
-      price: 45,
-      priceCurrency: 'CAD',
-      availability: 'https://schema.org/InStock',
-      url: MEETUP_EVENTS.mixer,
-    },
-  ],
-  organizer,
-};
-
 export type JsonLd = Record<string, unknown>;
 
 export type PageSeo = {
@@ -433,7 +377,6 @@ const eventsListLd: JsonLd = {
     { url: canonicalFor('/coworking-surrey'), event: coworkingLd },
     { url: canonicalFor('/board-game-night-surrey'), event: boardLd },
     { url: canonicalFor('/events/whitecaps-watch-party-2026-11-07'), event: whitecapsLd },
-    { url: canonicalFor('/events/end-of-year-mixer-2026-12-05'), event: partyLd },
   ].map((entry, index) => ({
     '@type': 'ListItem',
     position: index + 1,
@@ -543,7 +486,7 @@ export const eventsPage = page({
   h1: 'Surrey Events This Month',
   title: 'Surrey BC Events This Month | f8 Social Club',
   description:
-    'Upcoming coworking, board game nights, watch parties and mixers for professionals in Surrey, BC.',
+    'Upcoming coworking, board game nights, and watch parties for professionals in Surrey, BC.',
   jsonLd: [eventsListLd, eventsCrumbLd],
 });
 
@@ -568,27 +511,6 @@ export const whitecaps: DatedEventPage = {
   accent: 'peach',
 };
 
-export const mixer: DatedEventPage = {
-  ...page({
-    path: '/events/end-of-year-mixer-2026-12-05',
-    h1: 'End of Year Mixer for Surrey Professionals',
-    title: 'End of Year Mixer in Surrey, Dec 5 feat. DJ AJ | f8 Social Club',
-    description:
-      'Close out 2026 at Studio Nazrana, Surrey: welcome drink, dinner, icebreakers and dancing with DJ AJ. Sat Dec 5, 6:30 PM. Early bird $35.',
-    image: mixerShare,
-    jsonLd: partyLd,
-  }),
-  schedule: 'Saturday, December 5, 2026',
-  when: 'Saturday, December 5, 2026',
-  startDate: '2026-12-05T18:30:00-07:00',
-  time: '6:30 – 9:00 PM',
-  price: 'Early bird $35 · Regular $45',
-  venueLine: addressLine(nazrana),
-  mapQuery: addressLine(nazrana),
-  rsvp: MEETUP_EVENTS.mixer,
-  accent: 'pink',
-};
-
 // The spec lists this H1 and route, and not a title or meta description.
 export const about = page({
   path: '/about',
@@ -599,11 +521,17 @@ export const about = page({
   jsonLd: [orgLd, faithLd],
 });
 
-export const PAGES: PageSeo[] = [home, meetups, coworking, board, eventsPage, whitecaps, mixer, about];
+export const PAGES: PageSeo[] = [home, meetups, coworking, board, eventsPage, whitecaps, about];
 
 export const weeklySeries: EventPage[] = [coworking, board];
 
-export const datedEvents: DatedEventPage[] = [whitecaps, mixer];
+export const datedEvents: DatedEventPage[] = [whitecaps];
+
+// Canceled event and its sponsorship page. Both URLs 301 to /events.
+export const RETIRED_PATHS = [
+  '/events/end-of-year-mixer-2026-12-05',
+  '/end-of-year-mixer-sponsors',
+] as const;
 
 export const GAMES = ['Wavelength', 'Catch the Vibe', 'Avalon', 'Sushi Go', 'Spyfall', 'Codenames'];
 
@@ -619,6 +547,11 @@ export function normalizePath(url: string): string {
 export function pageByPath(url: string): PageSeo | undefined {
   const path = normalizePath(url);
   return PAGES.find((entry) => entry.path === path);
+}
+
+export function retiredEventRedirect(url: string): '/events' | undefined {
+  const path = normalizePath(url);
+  return (RETIRED_PATHS as readonly string[]).includes(path) ? '/events' : undefined;
 }
 
 function esc(value: string): string {

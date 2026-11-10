@@ -1,6 +1,6 @@
 import { Facts, Related, Rsvp, VenueLink } from '../components/ui.tsx';
 import { MEETUP_URL } from '../config.ts';
-import { MEETUPS_FAQ, board, coworking, eventsPage, meetups, mixer, whitecaps } from '../seo.ts';
+import { MEETUPS_FAQ, board, coworking, eventsPage, meetups, whitecaps } from '../seo.ts';
 
 export function MeetupsPage() {
   return (
@@ -77,13 +77,6 @@ export function MeetupsPage() {
         <p>
           <a href={whitecaps.path}>{whitecaps.h1}</a> is {whitecaps.when} at {whitecaps.time}. {whitecaps.price}.{' '}
           <a href={whitecaps.rsvp} target="_blank" rel="noopener noreferrer">
-            RSVP on Meetup
-          </a>
-          .
-        </p>
-        <p>
-          <a href={mixer.path}>{mixer.h1}</a> is {mixer.when}, {mixer.time}. {mixer.price}.{' '}
-          <a href={mixer.rsvp} target="_blank" rel="noopener noreferrer">
             RSVP on Meetup
           </a>
           .

@@ -7,7 +7,7 @@ Weekly events:
 - **Monday Coworking**, free, 6:30 – 8:00 PM at Chai Coffee Company
 - **Thursday Board Game Night**, free, 6:30 – 8:00 PM
 
-Monday coworking and Thursday board game night are recurring. Their pages describe the weekly time, not a next session. Dated one-offs (the Whitecaps watch party and the end-of-year mixer) live in `src/seo.ts`. Weekly titles, photos, and the links page still read `EVENTS` in `src/config.ts`.
+Monday coworking and Thursday board game night are recurring. Their pages describe the weekly time, not a next session. Dated one-offs (the Whitecaps watch party) live in `src/seo.ts`. Weekly titles, photos, and the links page still read `EVENTS` in `src/config.ts`. The December 5, 2026 event was canceled. Its old URLs redirect to `/events`.
 
 RSVPs go through Meetup.
 
@@ -37,9 +37,6 @@ them onto the existing static site before deploying this layout. Each clean URL
 has its own rewrite to `/_pages/<path>.html`. Do not add a `/*` catch-all
 rewrite; that rule redirected in a loop, and unknown paths should stay 404s.
 
-`/end-of-year-mixer-sponsors/` keeps its directory `index.html` because GitHub
-Pages publishes that folder. Render will not 301 a path that is a real file.
-
 Weekly coworking and board game JSON-LD include `eventSchedule` plus the next
 Monday or Thursday `startDate` and `endDate` in `America/Vancouver` at `-07:00`.
 Those two timestamps are calculated when the site is built. Rebuild after they
@@ -47,9 +44,9 @@ pass so the next occurrence stays current. Visible copy still says "every Monday
 and "every Thursday".
 
 Routes: `/`, `/meetups-in-surrey`, `/coworking-surrey`, `/board-game-night-surrey`, `/events`,
-`/events/whitecaps-watch-party-2026-11-07`, `/events/end-of-year-mixer-2026-12-05`,
-`/about`, `/links`, and `/end-of-year-mixer-sponsors`. `public/robots.txt`,
-`public/sitemap.xml`, and `public/llms.txt` are copied into `dist`.
+`/events/whitecaps-watch-party-2026-11-07`, `/about`, and `/links`.
+`/events/end-of-year-mixer-2026-12-05` and `/end-of-year-mixer-sponsors` 301 to `/events`.
+`public/robots.txt`, `public/sitemap.xml`, and `public/llms.txt` are copied into `dist`.
 
 Use Node 20.19+ or 22.12+ for the current Vite version.
 
@@ -74,5 +71,7 @@ Images live in `public/images/` (resized from the originals in `../social club/`
 Static site: build `npm install; npm run build`, publish path `dist`. The custom domain is f8social.club.
 
 Redirects and rewrites (also in `render.yaml`): 301 each trailing-slash URL to the slashless path, then rewrite that exact path to its file under `/_pages/`. `/meetups-in-surrey/` redirects to `/meetups-in-surrey`, which rewrites to `/_pages/meetups-in-surrey.html`. Do the same for the other public paths. Do not add a `/*` rewrite to `/_pages/*.html`. Add `X-Robots-Tag: noindex` on `/_pages/*`. Apply those rules on the existing service in the same deploy as this build. Without the rewrite, clean URLs 404.
+
+The canceled event is the exception. In the dashboard, delete the rewrite for `/events/end-of-year-mixer-2026-12-05`. Redirect both `/events/end-of-year-mixer-2026-12-05` and `/events/end-of-year-mixer-2026-12-05/` straight to `/events`, and do the same for `/end-of-year-mixer-sponsors` and `/end-of-year-mixer-sponsors/`. Keep those four redirects with the other redirects, before every rewrite. Do not leave a rewrite for the canceled detail URL. A redirect for that path placed above a rewrite of the same path 301-looped on this service. Do not point either form of the URL at the other. Render serves a real file before a route, so those paths must not get a directory `index.html`.
 
 Set `VITE_SUBSCRIBE_API_URL` to `https://fireplace-waitlist.onrender.com/f8social/subscribe` before that build.

@@ -9,7 +9,7 @@ export function EventArtwork({ theme }: { theme: NonNullable<LinksEvent['artwork
       fill="none"
       aria-hidden="true"
     >
-      {theme === 'soccer' ? (
+      {theme === 'soccer' && (
         <>
           <path fill="var(--sage)" d="M0 0h520v196H0z" />
           <g stroke="var(--green)" strokeWidth="2" opacity=".45">
@@ -37,22 +37,6 @@ export function EventArtwork({ theme }: { theme: NonNullable<LinksEvent['artwork
           </g>
           <path d="m148 54 4 12 12 4-12 4-4 12-4-12-12-4 12-4Z" fill="var(--peach)" stroke="var(--green)" strokeWidth="2" />
           <path d="m370 45 3 9 9 3-9 3-3 9-3-9-9-3 9-3Z" fill="var(--pink)" stroke="var(--green)" strokeWidth="2" />
-        </>
-      ) : (
-        <>
-          <path fill="var(--peach)" d="M0 0h520v196H0z" />
-          <path d="M0 160 182 0h156l182 160v36H0Z" fill="var(--pink)" />
-          <g stroke="var(--green)" strokeWidth="2">
-            <path d="M260 0v33" />
-            <circle cx="260" cy="89" r="55" fill="var(--green)" transform="translate(4 5)" />
-            <circle cx="260" cy="89" r="55" fill="var(--paper)" />
-            <ellipse cx="260" cy="89" rx="29" ry="55" fill="var(--sage)" />
-            <path d="M260 34v110m-51-75h102m-106 20h110m-106 20h102m-87-60h72m-72 80h72" />
-            <path d="m159 75 5 15 15 5-15 5-5 15-5-15-15-5 15-5Zm205-45 4 12 12 4-12 4-4 12-4-12-12-4 12-4Z" fill="var(--paper)" />
-            <path d="m119 136 7 12m264-57 12-7M180 29l9 8m152 111 8-10" strokeWidth="4" strokeLinecap="round" />
-            <circle cx="135" cy="47" r="5" fill="var(--sage)" />
-            <circle cx="381" cy="127" r="5" fill="var(--pink)" />
-          </g>
         </>
       )}
     </svg>

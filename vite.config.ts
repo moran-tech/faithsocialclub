@@ -11,9 +11,24 @@ const SEO_DEV_ROUTES = [
   '/board-game-night-surrey',
   '/events',
   '/events/whitecaps-watch-party-2026-11-07',
-  '/events/end-of-year-mixer-2026-12-05',
   '/about',
 ];
+
+// Canceled event. Both the old detail URL and the sponsorship page 301 to /events.
+const RETIRED_PATHS = ['/events/end-of-year-mixer-2026-12-05', '/end-of-year-mixer-sponsors'];
+
+function redirectRetired(url: string | undefined, res: { statusCode: number; setHeader: (name: string, value: string) => void; end: () => void }): boolean {
+  if (!url) return false;
+  const q = url.indexOf('?');
+  const path = q === -1 ? url : url.slice(0, q);
+  const query = q === -1 ? '' : url.slice(q);
+  const bare = path.length > 1 && path.endsWith('/') ? path.slice(0, -1) : path;
+  if (!RETIRED_PATHS.includes(bare)) return false;
+  res.statusCode = 301;
+  res.setHeader('Location', `/events${query}`);
+  res.end();
+  return true;
+}
 
 function requestPath(url: string | undefined): { bare: string; query: string } | undefined {
   if (!url || url.startsWith('/@') || url.startsWith('/src/') || url.startsWith('/node_modules/')) return;
@@ -31,6 +46,7 @@ function seoRoutes(): Plugin {
     configureServer(server) {
       server.middlewares.use((req, res, next) => {
         const url = req.url ?? '';
+        if (redirectRetired(url, res)) return;
         const q = url.indexOf('?');
         const path = q === -1 ? url : url.slice(0, q);
         const query = q === -1 ? '' : url.slice(q);
@@ -58,6 +74,7 @@ function seoRoutes(): Plugin {
       const dist = join(server.config.root, server.config.build.outDir);
       server.middlewares.use((req, res, next) => {
         const url = req.url ?? '';
+        if (redirectRetired(url, res)) return;
         const q = url.indexOf('?');
         const path = q === -1 ? url : url.slice(0, q);
         const query = q === -1 ? '' : url.slice(q);

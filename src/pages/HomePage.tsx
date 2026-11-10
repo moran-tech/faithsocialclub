@@ -1,7 +1,7 @@
 import { NewsletterForm } from '../NewsletterForm.tsx';
 import { EVENTS, MEETUP_URL, type ClubEvent } from '../config.ts';
 import { MeetupRating, Rsvp, VenueLink } from '../components/ui.tsx';
-import { FAQ, board, coworking, mixer, whitecaps, type DatedEventPage, type EventPage } from '../seo.ts';
+import { FAQ, board, coworking, whitecaps, type DatedEventPage, type EventPage } from '../seo.ts';
 
 const seriesById = {
   coworking,
@@ -140,7 +140,6 @@ export function HomePage() {
         <h2 className="script">Upcoming</h2>
         <div className="events">
           <SpecialCard event={whitecaps} />
-          <SpecialCard event={mixer} />
         </div>
       </section>
 

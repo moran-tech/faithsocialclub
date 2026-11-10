@@ -6,9 +6,8 @@ import { CoworkingPage } from './pages/CoworkingPage.tsx';
 import { EventsPage } from './pages/EventsPage.tsx';
 import { HomePage } from './pages/HomePage.tsx';
 import { MeetupsPage } from './pages/MeetupsPage.tsx';
-import { MixerPage } from './pages/MixerPage.tsx';
 import { WhitecapsPage } from './pages/WhitecapsPage.tsx';
-import { normalizePath, pageByPath } from './seo.ts';
+import { normalizePath, pageByPath, retiredEventRedirect } from './seo.ts';
 
 const PAGES: Record<string, () => ReactElement> = {
   '/': HomePage,
@@ -17,7 +16,6 @@ const PAGES: Record<string, () => ReactElement> = {
   '/board-game-night-surrey': BoardGamePage,
   '/events': EventsPage,
   '/events/whitecaps-watch-party-2026-11-07': WhitecapsPage,
-  '/events/end-of-year-mixer-2026-12-05': MixerPage,
   '/about': AboutPage,
 };
 
@@ -48,7 +46,20 @@ function usePageMeta(path: string) {
 
 export function Site({ path }: { path: string }) {
   const normal = normalizePath(path);
+  const retired = retiredEventRedirect(normal);
+  useEffect(() => {
+    if (retired) window.location.replace(retired);
+  }, [retired]);
   usePageMeta(normal);
+  if (retired) {
+    return (
+      <main>
+        <p>
+          <a href={retired}>Events</a>
+        </p>
+      </main>
+    );
+  }
   const Page = PAGES[normal];
   const seo = pageByPath(normal);
   if (!Page || !seo) return null;

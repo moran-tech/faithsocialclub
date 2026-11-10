@@ -22,7 +22,7 @@ export function AboutPage() {
         <p>
           <a href={meetups.path}>Meetups in Surrey</a> are free every week at this club. Coworking is
           Monday at 6:30 PM at Chai Coffee Company. Board game night is Thursday at 6:30 PM. Watch parties
-          and mixers land on the events page when a date is set.
+          land on the events page when a date is set.
         </p>
         <h2 className="script">Faith Morante</h2>
         <p>Faith Morante hosts f8 Social Club for Professionals. She is the founder of the club.</p>

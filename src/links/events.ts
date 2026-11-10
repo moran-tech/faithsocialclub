@@ -1,6 +1,6 @@
 import { EVENTS, type ClubEvent } from '../config.ts';
 
-type EventArtwork = 'soccer' | 'mixer';
+type EventArtwork = 'soccer';
 
 export type LinksEvent = Pick<
   ClubEvent,
@@ -14,18 +14,6 @@ export type LinksEvent = Pick<
 };
 
 // One-off event details stay on /links, separate from the homepage's weekly plans.
-export const FEATURED_MIXER = {
-  title: 'End of Year Mixer',
-  audience: 'For Surrey Professionals',
-  date: 'Sat, Dec 5',
-  time: '6:30–9 PM',
-  location: 'Studio Nazrana, Surrey',
-  url: 'https://www.meetup.com/coworking-surrey-hosted-by-morantech/events/317095315/',
-  perks: ['Live DJ', 'Food & drinks included', 'Event photographer', 'Sponsor giveaways'],
-  earlyBirdPrice: 35,
-  regularPrice: 45,
-};
-
 export const LINKS_EVENTS: LinksEvent[] = [
   ...EVENTS,
   {

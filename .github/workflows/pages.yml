@@ -1,23 +1,19 @@
-# Publishes the sponsorship page to GitHub Pages.
+# Replaces the old GitHub Pages sponsorship site.
 #
-# The Vite site stays on Render, where asset URLs are rooted at /.
-# This repository's Pages site is a project site, so it is served under
-# /<repo>/. Uploading dist/ would point the homepage at the wrong asset
-# prefix and leave a broken copy next to the Render site.
-# The sponsorship page is static HTML and does not use that prefix.
-# Render still copies public/ into dist/ on its own builds.
+# The December 5, 2026 event was canceled. This job publishes a short pointer
+# to https://f8social.club so the previous Pages deployment is replaced.
+# The Vite site stays on Render.
 
-name: Deploy sponsorship page
+name: Deploy GitHub Pages pointer
 
 on:
   push:
     branches:
       - main
     paths:
-      - "public/end-of-year-mixer-sponsors/**"
-      - "public/favicon.png"
       - ".github/pages/**"
       - ".github/workflows/pages.yml"
+      - "public/favicon.png"
   workflow_dispatch:
 
 permissions:
@@ -36,73 +32,18 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Check required sponsorship copy
-        run: |
-          page="public/end-of-year-mixer-sponsors/index.html"
-          test -f "$page"
-          python3 - "$page" <<'PY'
-          import pathlib, sys
-          text = pathlib.Path(sys.argv[1]).read_text(encoding="utf-8")
-          lowered = text.lower()
-          required = [
-              "End of Year Mixer — Sponsorship Packages",
-              "Social Club for Professionals (Surrey, BC)",
-              "https://www.meetup.com/coworking-surrey-hosted-by-morantech/",
-              "https://instagram.com/socialclub.pros",
-              "@socialclub.pros",
-              "Saturday, December 5, 2026",
-              "6:30 to 9 p.m.",
-              "Studio Nazrana",
-              "13140 80 Ave, Surrey, BC",
-              "About 50 guests",
-              "Reach about 50 Surrey professionals from tech and other industries who can afford your products or services. The community has about 182 Meetup members.",
-              "Sponsors choose the level that fits them.",
-              "End of Year Mixer presented by [Your Brand]",
-              "5-minute stage talk",
-              "2-minute stage talk",
-              "Stage talk",
-              "5 min",
-              "2 min",
-              "main banner at the event",
-              "pop-up spot to meet guests",
-              "offer card in every goodie bag",
-              "raffle prize draw on stage",
-              "dedicated Instagram post before the event",
-              "thank-you on stage",
-              "logo on signage",
-              "shared Instagram sponsor post",
-              "Meetup mention",
-              "Instagram story tag",
-              "your products or offer card in every goodie bag",
-              "one sponsor only",
-              "$1,000",
-              "$500",
-              "$300",
-              "Faith Morante",
-              "faith.morante@gmail.com",
-              "mailto:faith.morante@gmail.com",
-              "Reply to the email or reach out to claim your level.",
-          ]
-          missing = [item for item in required if item.lower() not in lowered]
-          if missing:
-              print("Missing required copy:")
-              for item in missing:
-                  print(f"- {item}")
-              sys.exit(1)
-          import re
-          if re.search(r"ticket|per[-\s]?person|per guest|admission", lowered):
-              print("Page mentions ticket prices or per-person costs")
-              sys.exit(1)
-          print("Sponsorship copy check passed")
-          PY
-
       - name: Assemble Pages site
         run: |
-          mkdir -p _site/end-of-year-mixer-sponsors
-          cp -a public/end-of-year-mixer-sponsors/. _site/end-of-year-mixer-sponsors/
-          cp public/favicon.png _site/favicon.png
+          test -f .github/pages/index.html
+          test -f public/favicon.png
+          mkdir -p _site
           cp .github/pages/index.html _site/index.html
+          cp public/favicon.png _site/favicon.png
           touch _site/.nojekyll
+          if grep -Ei 'mixer|nazrana|early bird|317095315' _site/index.html; then
+            echo "Pages index still promotes the canceled event"
+            exit 1
+          fi
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
