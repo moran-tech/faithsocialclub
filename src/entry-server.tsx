@@ -1,7 +1,7 @@
 import { StrictMode } from 'react';
 import { renderToString } from 'react-dom/server';
 import LinksPage from './links/LinksPage.tsx';
-import { FAQ, PAGES, nextWeeklyWindow, renderHead, normalizePath, pageByPath } from './seo.ts';
+import { FAQ, PAGES, nextWeeklyWindow, renderHead, normalizePath, pageByPath, retiredEventRedirect } from './seo.ts';
 import { Site } from './Site.tsx';
 
 export function render(url: string): { html: string; head: string } {
@@ -24,4 +24,4 @@ export function renderLinks(): string {
   );
 }
 
-export { FAQ, PAGES, nextWeeklyWindow, normalizePath };
+export { FAQ, PAGES, nextWeeklyWindow, normalizePath, retiredEventRedirect };

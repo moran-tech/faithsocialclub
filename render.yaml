@@ -3,8 +3,14 @@
 # Render serves a real file before it applies a route, so path/index.html would
 # keep /path/ as a second 200. This build publishes each clean URL as
 # dist/_pages/<path>.html and does not publish those directory indexes.
-# The homepage stays dist/index.html. /end-of-year-mixer-sponsors/ still has
-# its own index.html, so its trailing slash is not redirected.
+# The homepage stays dist/index.html.
+#
+# The December 5, 2026 event was canceled. Redirect both the detail URL and
+# the old sponsorship URL to /events. Publish no directory index at either
+# path, or Render serves that file and skips the redirect. Do not add a
+# rewrite for the detail URL. A redirect for that path placed above a rewrite
+# of the same path 301-looped on this service. Send both the slash and
+# slashless forms straight to /events. Do not point either form at the other.
 #
 # If f8social.club already exists in Render, copy `routes` and `headers` onto
 # that service. Do not sync this file as a second static site, and do not move
@@ -41,7 +47,16 @@ services:
         destination: /events/whitecaps-watch-party-2026-11-07
       - type: redirect
         source: /events/end-of-year-mixer-2026-12-05/
-        destination: /events/end-of-year-mixer-2026-12-05
+        destination: /events
+      - type: redirect
+        source: /events/end-of-year-mixer-2026-12-05
+        destination: /events
+      - type: redirect
+        source: /end-of-year-mixer-sponsors/
+        destination: /events
+      - type: redirect
+        source: /end-of-year-mixer-sponsors
+        destination: /events
       - type: redirect
         source: /about/
         destination: /about
@@ -60,9 +75,6 @@ services:
       - type: rewrite
         source: /events/whitecaps-watch-party-2026-11-07
         destination: /_pages/events/whitecaps-watch-party-2026-11-07.html
-      - type: rewrite
-        source: /events/end-of-year-mixer-2026-12-05
-        destination: /_pages/events/end-of-year-mixer-2026-12-05.html
       - type: rewrite
         source: /events
         destination: /_pages/events.html

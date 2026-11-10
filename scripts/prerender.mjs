@@ -205,18 +205,48 @@ for (const series of [
 }
 assert.equal(jsonLd(whitecapsHtml)[0].startDate, '2026-11-07T14:00:00-07:00');
 assert.equal(jsonLd(whitecapsHtml)[0].endDate, undefined);
-const mixerHtml = readFileSync(join(root, 'dist/_pages/events/end-of-year-mixer-2026-12-05.html'), 'utf8');
-assert.equal(jsonLd(mixerHtml)[0].startDate, '2026-12-05T18:30:00-07:00');
-assert.match(mixerHtml, /property="og:image" content="https:\/\/f8social\.club\/images\/coworking-conversation-og\.webp"/);
+
+const retiredDetail = '/events/end-of-year-mixer-2026-12-05';
+const retiredSponsors = '/end-of-year-mixer-sponsors';
+assert.equal(ssr.retiredEventRedirect(retiredDetail), '/events');
+assert.equal(ssr.retiredEventRedirect(`${retiredDetail}/`), '/events');
+assert.equal(ssr.retiredEventRedirect(retiredSponsors), '/events');
+assert.equal(ssr.retiredEventRedirect(`${retiredSponsors}/`), '/events');
+assert.equal(ssr.retiredEventRedirect('/events'), undefined);
+assert.equal(ssr.PAGES.some((page) => page.path === retiredDetail), false);
+
+// Fallback for the previous Render rewrite. The public URL must 301 instead.
+// This file is only reached at /_pages/... (noindex) or if that old rewrite
+// is still installed. It does not describe the canceled event.
+const retiredStub = join(root, 'dist/_pages/events/end-of-year-mixer-2026-12-05.html');
+mkdirSync(dirname(retiredStub), { recursive: true });
+writeFileSync(
+  retiredStub,
+  `<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Events</title>
+    <link rel="canonical" href="https://f8social.club/events" />
+    <meta name="robots" content="noindex" />
+    <meta http-equiv="refresh" content="0; url=/events" />
+    <script>location.replace("/events")</script>
+  </head>
+  <body>
+    <p><a href="/events">Events</a></p>
+  </body>
+</html>
+`,
+);
+assert.equal(existsSync(join(root, 'dist/events/end-of-year-mixer-2026-12-05/index.html')), false);
+assert.equal(existsSync(join(root, 'dist/end-of-year-mixer-sponsors/index.html')), false);
+assert.equal(existsSync(join(root, 'dist/end-of-year-mixer-sponsors')), false);
 
 function walkHtml(dir, files = []) {
   for (const entry of readdirSync(dir, { withFileTypes: true })) {
     const full = join(dir, entry.name);
     if (entry.isDirectory()) walkHtml(full, files);
-    else if (
-      (entry.name.endsWith('.html') || entry.name.endsWith('.js')) &&
-      !full.includes(`${sep}end-of-year-mixer-sponsors${sep}`)
-    ) {
+    else if (entry.name.endsWith('.html') || entry.name.endsWith('.js') || entry.name.endsWith('.css')) {
       files.push(full);
     }
   }
@@ -237,7 +267,9 @@ for (const file of walkHtml(join(root, 'dist'))) {
 }
 assert.equal(sitemap.includes('faithsocialclub.com'), false);
 assert.equal(sitemap.includes('<loc>https://f8social.club/links</loc>'), true);
-assert.equal(sitemap.includes('<loc>https://f8social.club/end-of-year-mixer-sponsors</loc>'), true);
+assert.equal(sitemap.includes(retiredDetail), false);
+assert.equal(sitemap.includes(retiredSponsors), false);
+assert.match(sitemap, /<lastmod>2026-11-10<\/lastmod>/);
 assert.equal(sitemap.includes('2026-11-02'), false);
 assert.match(sitemap, /<lastmod>2026-11-06<\/lastmod>/);
 const llms = readFileSync(join(root, 'dist/llms.txt'), 'utf8');
@@ -248,7 +280,6 @@ for (const url of [
   'https://f8social.club/board-game-night-surrey',
   'https://f8social.club/events',
   'https://f8social.club/events/whitecaps-watch-party-2026-11-07',
-  'https://f8social.club/events/end-of-year-mixer-2026-12-05',
   'https://f8social.club/about',
   'https://f8social.club/links',
 ]) {
@@ -256,6 +287,8 @@ for (const url of [
 }
 assert.match(llms, /UTC-7/);
 assert.equal(llms.includes('AggregateRating'), false);
+assert.equal(llms.includes(retiredDetail), false);
+assert.equal(llms.includes(retiredSponsors), false);
 const homeHtml = readFileSync(join(root, 'dist/index.html'), 'utf8');
 assert.match(homeHtml, /from 30 ratings/);
 assert.equal(homeHtml.includes('24 reviews'), false);
@@ -305,6 +338,66 @@ assert.match(renderYaml, /source: \/meetups-in-surrey\/\n\s+destination: \/meetu
 assert.match(renderYaml, /source: \/meetups-in-surrey\n\s+destination: \/_pages\/meetups-in-surrey\.html\n/);
 assert.equal(renderYaml.includes('source: /*'), false);
 assert.equal(renderYaml.includes('/_pages/*.html'), false);
+const routeBlock = renderYaml.slice(renderYaml.indexOf('routes:'));
+const firstRewrite = routeBlock.indexOf('type: rewrite');
+for (const source of [
+  'source: /events/end-of-year-mixer-2026-12-05/\n',
+  'source: /events/end-of-year-mixer-2026-12-05\n',
+  'source: /end-of-year-mixer-sponsors/\n',
+  'source: /end-of-year-mixer-sponsors\n',
+]) {
+  const at = routeBlock.indexOf(source);
+  assert.ok(at !== -1 && at < firstRewrite, source.trim());
+  const rule = routeBlock.slice(at, routeBlock.indexOf('type:', at + source.length));
+  assert.match(rule, /destination: \/events\n/);
+  assert.equal(/destination: \/events\/end-of-year-mixer/.test(rule), false, source.trim());
+  assert.equal(rule.includes('type: rewrite') || routeBlock.slice(at, at + 80).includes('type: rewrite'), false);
+}
+assert.equal(routeBlock.includes('destination: /_pages/events/end-of-year-mixer-2026-12-05.html'), false);
+assert.match(viteConfig, /RETIRED_PATHS = \['\/events\/end-of-year-mixer-2026-12-05', '\/end-of-year-mixer-sponsors'\]/);
+assert.equal(viteConfig.includes(`'${retiredDetail}'`), true);
+
+const allowedRetired = [retiredDetail, retiredSponsors];
+const forbiddenCopy = [
+  /end of year/i,
+  /nazrana/i,
+  /early bird/i,
+  /317095315/,
+  /dj aj/i,
+  /december 5/i,
+  /\bdec 5\b/i,
+  /\$35\b/,
+  /\$45\b/,
+  /mixer-feature/,
+  /grab your early/i,
+];
+function walkDist(dir, files = []) {
+  for (const entry of readdirSync(dir, { withFileTypes: true })) {
+    const full = join(dir, entry.name);
+    if (entry.isDirectory()) walkDist(full, files);
+    else files.push(full);
+  }
+  return files;
+}
+const textExt = new Set(['.html', '.js', '.css', '.txt', '.xml', '.json', '.svg']);
+for (const file of walkDist(join(root, 'dist'))) {
+  const relative = file.slice(root.length + 1);
+  const allowedName = relative.endsWith(`${sep}_pages${sep}events${sep}end-of-year-mixer-2026-12-05.html`);
+  if (/mixer/i.test(relative) && !allowedName) {
+    throw new Error(`unexpected mixer path in build output: ${relative}`);
+  }
+  const ext = relative.slice(relative.lastIndexOf('.'));
+  if (!textExt.has(ext)) continue;
+  const raw = readFileSync(file, 'utf8');
+  for (const pattern of forbiddenCopy) {
+    if (pattern.test(raw)) throw new Error(`canceled event copy still in ${relative}`);
+  }
+  let leftover = raw;
+  if (allowedName || relative.endsWith('.js')) {
+    for (const path of allowedRetired) leftover = leftover.split(path).join('');
+  }
+  if (/mixer/i.test(leftover)) throw new Error(`mixer reference still in ${relative}`);
+}
 for (const file of [
   'images/board-game-night.webp',
   'images/coworking-group.webp',
