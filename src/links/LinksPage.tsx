@@ -50,7 +50,7 @@ function EventLink({ event, index }: { event: LinksEvent; index: number }) {
                 decoding="async"
               />
             )}
-            <span className="event-link__day">{dayLabel}</span>
+            {event.id !== 'boardgames' && <span className="event-link__day">{dayLabel}</span>}
             {event.sticker && <span className="event-link__sticker">{event.sticker}</span>}
           </div>
         )}
