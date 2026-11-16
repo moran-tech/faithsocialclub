@@ -23,7 +23,7 @@ export const LINKS_EVENTS: LinksEvent[] = [
     title: 'Bowling Night',
     tagline: 'Full - join the waitlist',
     location: 'Zone Bowling Coquitlam · #16-228 Schoolhouse Street, Coquitlam, BC',
-    url: 'https://www.meetup.com/coworking-surrey-hosted-by-morantech/events/',
+    url: 'https://www.meetup.com/coworking-surrey-hosted-by-morantech/events/317448447/',
     accent: 'peach',
   },
   ...EVENTS,
