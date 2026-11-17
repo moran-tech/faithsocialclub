@@ -16,8 +16,8 @@ export type EventPhoto = {
 
 export type ClubEvent = {
   id: string;
-  day: string;
-  time: string;
+  day?: string;
+  time?: string;
   title: string;
   tagline: string;
   description: string;
@@ -91,8 +91,6 @@ export const EVENTS: ClubEvent[] = [
   },
   {
     id: 'boardgames',
-    day: 'Thursday',
-    time: '6:30 – 8:00 PM',
     title: 'Board Game Night',
     tagline: 'Play games · Meet new people · Have fun',
     description:

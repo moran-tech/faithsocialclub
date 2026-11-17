@@ -45,11 +45,11 @@ const coworkingShare = shareImage(
 );
 const whitecapsShare = shareImage('/images/coworking-long-table-og.webp', COWORKING_LONG_TABLE.alt);
 
-export function nextWeeklyWindow(day: 'Monday' | 'Thursday', now = new Date()): {
+export function nextWeeklyWindow(day: 'Monday', now = new Date()): {
   startDate: string;
   endDate: string;
 } {
-  const target = day === 'Monday' ? 1 : 4;
+  const target = { Monday: 1 }[day];
   const shifted = new Date(now.getTime() - PACIFIC_OFFSET_MS);
   const weekday = shifted.getUTCDay();
   const minutes = shifted.getUTCHours() * 60 + shifted.getUTCMinutes();
@@ -72,7 +72,7 @@ export const FAQ: readonly FaqItem[] = [
   {
     question: 'Is it free?',
     answer:
-      'Monday coworking, Thursday board game night, and the Whitecaps watch party are free. RSVP on Meetup. Food and drinks at the watch party are ordered from the restaurant.',
+      'Monday coworking, board game night, and the Whitecaps watch party are free. RSVP on Meetup. Food and drinks at the watch party are ordered from the restaurant.',
   },
   {
     question: 'Do I need to know the games?',
@@ -94,27 +94,27 @@ export const MEETUPS_FAQ: readonly FaqItem[] = [
   {
     question: 'What meetups are in Surrey?',
     answer:
-      'f8 Social Club hosts two free meetups in Surrey every week for professionals. Monday coworking is 6:30 – 8:00 PM at Chai Coffee Company, 11088 126a St #100. Thursday board game night is 6:30 – 8:00 PM at the Central City Mall food court. RSVP on Meetup. Other groups also post on Meetup.com. This page is our club, not a directory of every meetup in the city.',
+      'f8 Social Club hosts two free meetups in Surrey for professionals. Monday coworking is 6:30 – 8:00 PM at Chai Coffee Company, 11088 126a St #100. Board game night is at the Central City Mall food court, 10153 King George Blvd, Surrey. RSVP on Meetup. Other groups also post on Meetup.com. This page is our club, not a directory of every meetup in the city.',
   },
   {
     question: 'Where can I meet people in Surrey?',
     answer:
-      'Come back to the same weekly meetup. Monday coworking at Chai Coffee Company and Thursday board games at Central City Mall are both free and start at 6:30 PM. Most people arrive alone. RSVP on Meetup so we know to expect you.',
+      'Come back to the same meetup. Monday coworking at Chai Coffee Company starts at 6:30 PM. Board games are at Central City Mall food court, 10153 King George Blvd, Surrey. Both are free. Most people arrive alone. RSVP on Meetup so we know to expect you.',
   },
   {
     question: 'How do I meet people in Surrey?',
     answer:
-      'RSVP for one night, show up, and come again the next week. Monday coworking is an hour of quiet work, then conversation. Thursday board game night starts with the rules, so you can sit down without knowing anyone. The same room each week is how names become friends.',
+      'RSVP for one night, show up, and come again. Monday coworking is an hour of quiet work, then conversation. Board game night starts with the rules, so you can sit down without knowing anyone. Familiar faces are how names become friends.',
   },
   {
     question: 'Where can adults go in Surrey today?',
     answer:
-      'On Mondays, coworking at Chai Coffee Company, 6:30 – 8:00 PM. On Thursdays, board games at the Central City Mall food court, 6:30 – 8:00 PM. Both are free and meant for adults who want company after work. Other dates, including the Whitecaps watch party, are on the events page.',
+      'On Mondays, coworking at Chai Coffee Company, 6:30 – 8:00 PM. Board games are at the Central City Mall food court, 10153 King George Blvd, Surrey. Both are free and meant for adults who want company after work. Other dates, including the Whitecaps watch party, are on the events page.',
   },
   {
     question: 'Are the meetups free?',
     answer:
-      'Yes. Monday coworking and Thursday board game night are free. RSVP on Meetup. The Whitecaps watch party is free entry, and food and drinks are ordered from the restaurant.',
+      'Yes. Monday coworking and board game night are free. RSVP on Meetup. The Whitecaps watch party is free entry, and food and drinks are ordered from the restaurant.',
   },
   {
     question: 'Can I come alone?',
@@ -123,12 +123,12 @@ export const MEETUPS_FAQ: readonly FaqItem[] = [
   {
     question: 'Where are the meetups?',
     answer:
-      'Coworking is at Chai Coffee Company, 11088 126a St #100, Surrey. Board game night is at the Central City Mall food court, 10153 King George Blvd, Surrey. Both run 6:30 – 8:00 PM.',
+      'Coworking is at Chai Coffee Company, 11088 126a St #100, Surrey, every Monday, 6:30 – 8:00 PM. Board game night is at the Central City Mall food court, 10153 King George Blvd, Surrey.',
   },
   {
     question: 'Has anything replaced Meetup?',
     answer:
-      'Nothing has replaced Meetup for this club. Meetup is still active, and it is where we RSVP for Monday coworking, Thursday board games, and the other Surrey events.',
+      'Nothing has replaced Meetup for this club. Meetup is still active, and it is where we RSVP for Monday coworking, board games, and the other Surrey events.',
   },
 ];
 
@@ -155,7 +155,7 @@ const orgLd = {
   logo: `${ORIGIN}/favicon.png`,
   image: OG_IMAGE,
   description:
-    'A social club for professionals in Surrey, BC: free coworking every Monday and board game night every Thursday at 6:30 PM.',
+    'A social club for professionals in Surrey, BC: free coworking every Monday at 6:30 PM and free board game night.',
   founder: { '@type': 'Person', name: 'Faith Morante' },
   areaServed: { '@type': 'City', name: 'Surrey, British Columbia' },
   sameAs: [MEETUP_URL, INSTAGRAM_URL],
@@ -184,7 +184,7 @@ const browns = {
   region: 'BC',
 };
 
-function weeklySchedule(day: 'Monday' | 'Thursday') {
+function weeklySchedule(day: 'Monday') {
   return {
     '@type': 'Schedule',
     repeatFrequency: 'P1W',
@@ -196,7 +196,6 @@ function weeklySchedule(day: 'Monday' | 'Thursday') {
 }
 
 const mondayWindow = nextWeeklyWindow('Monday');
-const thursdayWindow = nextWeeklyWindow('Thursday');
 
 const coworkingLd = {
   '@context': 'https://schema.org',
@@ -233,41 +232,6 @@ const coworkingLd = {
     priceCurrency: 'CAD',
     availability: 'https://schema.org/InStock',
     url: MEETUP_EVENTS.coworking,
-  },
-  organizer,
-};
-
-const boardLd = {
-  '@context': 'https://schema.org',
-  '@type': 'Event',
-  name: 'Board Game Night in Surrey',
-  description:
-    'A relaxed night of party and strategy games like Wavelength, Catch the Vibe, Avalon, Sushi Go, Spyfall and Codenames. No experience needed; come solo or bring a friend.',
-  eventSchedule: weeklySchedule('Thursday'),
-  startDate: thursdayWindow.startDate,
-  endDate: thursdayWindow.endDate,
-  eventStatus: 'https://schema.org/EventScheduled',
-  eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
-  isAccessibleForFree: true,
-  location: {
-    '@type': 'Place',
-    name: centralCity.name,
-    address: {
-      '@type': 'PostalAddress',
-      streetAddress: centralCity.street,
-      addressLocality: centralCity.locality,
-      addressRegion: centralCity.region,
-      postalCode: centralCity.postal,
-      addressCountry: 'CA',
-    },
-  },
-  image: [`${ORIGIN}/images/board-game-night.webp`],
-  offers: {
-    '@type': 'Offer',
-    price: 0,
-    priceCurrency: 'CAD',
-    availability: 'https://schema.org/InStock',
-    url: MEETUP_EVENTS.board,
   },
   organizer,
 };
@@ -318,8 +282,8 @@ export type PageSeo = {
 };
 
 export type EventPage = PageSeo & {
-  schedule: string;
-  time: string;
+  schedule?: string;
+  time?: string;
   price: string;
   venueLine: string;
   mapQuery: string;
@@ -328,6 +292,8 @@ export type EventPage = PageSeo & {
 };
 
 export type DatedEventPage = EventPage & {
+  schedule: string;
+  time: string;
   when: string;
   startDate: string;
 };
@@ -374,15 +340,22 @@ const eventsListLd: JsonLd = {
   '@type': 'ItemList',
   name: 'Surrey Events This Month',
   itemListElement: [
-    { url: canonicalFor('/coworking-surrey'), event: coworkingLd },
-    { url: canonicalFor('/board-game-night-surrey'), event: boardLd },
-    { url: canonicalFor('/events/whitecaps-watch-party-2026-11-07'), event: whitecapsLd },
+    { url: canonicalFor('/coworking-surrey'), item: eventNode(coworkingLd) },
+    {
+      url: canonicalFor('/board-game-night-surrey'),
+      item: {
+        '@type': 'WebPage',
+        name: 'Board Game Night in Surrey',
+        url: canonicalFor('/board-game-night-surrey'),
+      },
+    },
+    { url: canonicalFor('/events/whitecaps-watch-party-2026-11-07'), item: eventNode(whitecapsLd) },
   ].map((entry, index) => ({
     '@type': 'ListItem',
     position: index + 1,
     url: entry.url,
-    name: entry.event.name,
-    item: eventNode(entry.event),
+    name: entry.item.name,
+    item: entry.item,
   })),
 };
 
@@ -424,7 +397,7 @@ export function mapsUrl(query: string): string {
 }
 
 const homeDescription =
-  'Free weekly coworking on Mondays and board game nights on Thursdays in Surrey, BC. Meet professionals, make friends, come solo. RSVP on Meetup.';
+  'Free coworking every Monday and free board game nights in Surrey, BC. Meet professionals, make friends, come solo. RSVP on Meetup.';
 
 export const home = page({
   path: '/',
@@ -457,14 +430,11 @@ export const coworking: EventPage = {
 export const board: EventPage = {
   ...page({
     path: '/board-game-night-surrey',
-    h1: 'Board Game Night in Surrey, Every Thursday',
-    title: 'Board Game Night in Surrey BC, Thursdays 6:30 PM | f8 Social Club',
+    h1: 'Board Game Night in Surrey',
+    title: 'Board Game Night in Surrey BC | f8 Social Club',
     description:
-      'Weekly board game night in Surrey: Codenames, Avalon, Wavelength and more. No experience needed, come solo or bring a friend. Free to join.',
-    jsonLd: boardLd,
+      'Free board game night at Central City Mall food court, 10153 King George Blvd, Surrey. Codenames, Avalon, Wavelength and more. Come solo. RSVP on Meetup.',
   }),
-  schedule: 'Every Thursday, 6:30 PM',
-  time: '6:30 – 8:00 PM',
   price: 'Free',
   venueLine: addressLine(centralCity),
   mapQuery: addressLine(centralCity),
@@ -475,9 +445,9 @@ export const board: EventPage = {
 export const meetups = page({
   path: '/meetups-in-surrey',
   h1: 'Meetups in Surrey',
-  title: 'Meetups in Surrey BC | Free Weekly Social Events | f8 Social Club',
+  title: 'Meetups in Surrey BC | Free Social Events | f8 Social Club',
   description:
-    'Free weekly meetups in Surrey, BC for professionals: Monday coworking and Thursday board games at 6:30 PM. Come solo and RSVP on Meetup.',
+    'Free meetups in Surrey, BC for professionals: Monday coworking at 6:30 PM and board games at Central City Mall food court. Come solo and RSVP on Meetup.',
   jsonLd: [faqPageLd(MEETUPS_FAQ), meetupsCrumbLd],
 });
 
@@ -517,13 +487,13 @@ export const about = page({
   h1: 'About f8 Social Club',
   title: 'About f8 Social Club | Surrey BC',
   description:
-    'Faith Morante hosts f8 Social Club for professionals in Surrey, BC. Free coworking every Monday and board game night every Thursday. Come solo.',
+    'Faith Morante hosts f8 Social Club for professionals in Surrey, BC. Free coworking every Monday and free board game night. Come solo.',
   jsonLd: [orgLd, faithLd],
 });
 
 export const PAGES: PageSeo[] = [home, meetups, coworking, board, eventsPage, whitecaps, about];
 
-export const weeklySeries: EventPage[] = [coworking, board];
+export const eventSeries: EventPage[] = [coworking, board];
 
 export const datedEvents: DatedEventPage[] = [whitecaps];
 

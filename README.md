@@ -2,12 +2,12 @@
 
 Landing pages for f8 Social Club in Surrey, BC. Canonical host: **https://f8social.club**.
 
-Weekly events:
+Events:
 
 - **Monday Coworking**, free, 6:30 – 8:00 PM at Chai Coffee Company
-- **Thursday Board Game Night**, free, 6:30 – 8:00 PM
+- **Board Game Night**, free, at Central City Mall food court, 10153 King George Blvd, Surrey
 
-Monday coworking and Thursday board game night are recurring. Their pages describe the weekly time, not a next session. Dated one-offs (the Whitecaps watch party) live in `src/seo.ts`. Weekly titles, photos, and the links page still read `EVENTS` in `src/config.ts`. The December 5, 2026 event was canceled. Its old URLs redirect to `/events`.
+Monday coworking repeats every week. Its page describes the weekly time, not a next session. Board Game Night has no published day, cadence, or time. Dated one-offs (the Whitecaps watch party) live in `src/seo.ts`. Event titles, photos, and the links page still read `EVENTS` in `src/config.ts`. The December 5, 2026 event was canceled. Its old URLs redirect to `/events`.
 
 RSVPs go through Meetup.
 
@@ -23,7 +23,7 @@ npm run build      # type-check + production build into dist/
 
 `https://f8social.club/links` is a separate, mobile-first page for the Instagram bio.
 Its HTML entry is `links/index.html`, with React and isolated styles in `src/links/`.
-It reads weekly `EVENTS` from `src/config.ts` and adds one-off events in
+It reads `EVENTS` from `src/config.ts` and adds one-off events in
 `src/links/events.ts`, without changing the homepage's event copy. It reuses
 `NewsletterForm`, including the same `VITE_SUBSCRIBE_API_URL` build setting as the
 homepage.
@@ -37,11 +37,12 @@ them onto the existing static site before deploying this layout. Each clean URL
 has its own rewrite to `/_pages/<path>.html`. Do not add a `/*` catch-all
 rewrite; that rule redirected in a loop, and unknown paths should stay 404s.
 
-Weekly coworking and board game JSON-LD include `eventSchedule` plus the next
-Monday or Thursday `startDate` and `endDate` in `America/Vancouver` at `-07:00`.
+Weekly coworking JSON-LD includes `eventSchedule` plus the next
+Monday `startDate` and `endDate` in `America/Vancouver` at `-07:00`.
 Those two timestamps are calculated when the site is built. Rebuild after they
-pass so the next occurrence stays current. Visible copy still says "every Monday"
-and "every Thursday".
+pass so the next occurrence stays current. Visible coworking copy still says "every Monday".
+Board Game Night has no Event JSON-LD because no start date is published; the events
+list links to it as a WebPage instead.
 
 Routes: `/`, `/meetups-in-surrey`, `/coworking-surrey`, `/board-game-night-surrey`, `/events`,
 `/events/whitecaps-watch-party-2026-11-07`, `/about`, and `/links`.
@@ -62,7 +63,7 @@ The request body is JSON: `email`, optional `firstName` (omitted when blank), `c
 
 ## Editing content
 
-Weekly event blurbs and the Meetup link live in `src/config.ts`. Page titles and JSON-LD live in `src/seo.ts`.
+Event blurbs and the Meetup link live in `src/config.ts`. Day and time are optional; consumers omit missing labels and separators. Page titles and JSON-LD live in `src/seo.ts`.
 
 Images live in `public/images/` (resized from the originals in `../social club/`). Coworking photos are the `photos` list on the Monday event.
 

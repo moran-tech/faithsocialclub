@@ -18,10 +18,10 @@ export function AboutPage() {
           Professionals in Surrey who want friends outside work. Builders, creators, freelancers, and founders
           are all in the room. Come solo. Most people do.
         </p>
-        <h2 className="script">The week</h2>
+        <h2 className="script">The meetups</h2>
         <p>
-          <a href={meetups.path}>Meetups in Surrey</a> are free every week at this club. Coworking is
-          Monday at 6:30 PM at Chai Coffee Company. Board game night is Thursday at 6:30 PM. Watch parties
+          <a href={meetups.path}>Meetups in Surrey</a> are free at this club. Coworking is every
+          Monday at 6:30 PM at Chai Coffee Company. Board game night is at Central City Mall food court. Watch parties
           land on the events page when a date is set.
         </p>
         <h2 className="script">Faith Morante</h2>
@@ -61,7 +61,7 @@ export function AboutPage() {
           links={[
             { href: meetups.path, label: 'Meetups in Surrey' },
             { href: coworking.path, label: 'Monday coworking' },
-            { href: board.path, label: 'Thursday board game night' },
+            { href: board.path, label: 'Board game night' },
             { href: eventsPage.path, label: 'Surrey events this month' },
           ]}
         />

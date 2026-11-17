@@ -161,10 +161,6 @@ assert.equal(
   '2026-11-09T20:00:00-07:00',
 );
 assert.equal(
-  ssr.nextWeeklyWindow('Thursday', new Date('2026-11-06T12:00:00-07:00')).startDate,
-  '2026-11-12T18:30:00-07:00',
-);
-assert.equal(
   ssr.nextWeeklyWindow('Monday', new Date('2026-11-09T18:00:00-07:00')).startDate,
   '2026-11-09T18:30:00-07:00',
 );
@@ -186,7 +182,6 @@ assert.equal(jsonLd(whitecapsHtml)[0].location.address.postalCode, undefined);
 
 for (const series of [
   { path: '/coworking-surrey', day: 'Monday' },
-  { path: '/board-game-night-surrey', day: 'Thursday' },
 ]) {
   const seriesHtml = readFileSync(join(root, 'dist/_pages', `${series.path.slice(1)}.html`), 'utf8');
   const seriesLd = jsonLd(seriesHtml)[0];
@@ -198,11 +193,62 @@ for (const series of [
   assert.equal(seriesLd.eventSchedule['@type'], 'Schedule');
   assert.equal(seriesLd.eventSchedule.repeatFrequency, 'P1W');
   assert.equal(seriesLd.eventSchedule.scheduleTimezone, 'America/Vancouver');
-  assert.match(seriesLd.eventSchedule.byDay, /^https:\/\/schema\.org\/(Monday|Thursday)$/);
+  assert.equal(seriesLd.eventSchedule.byDay, 'https://schema.org/Monday');
   assert.equal(seriesLd.eventSchedule.startTime, '18:30:00');
   assert.equal(seriesLd.eventSchedule.endTime, '20:00:00');
   assert.equal(visibleText(seriesHtml).includes('Next session'), false, series.path);
 }
+const boardHtml = readFileSync(join(root, 'dist/_pages/board-game-night-surrey.html'), 'utf8');
+// Also catch the abbreviated weekday without putting stale copy in source-wide scans.
+assert.doesNotMatch(boardHtml, /\bthurs(?:day)?s?\b/i);
+assert.doesNotMatch(boardHtml, /eventSchedule|startDate|endDate/);
+assert.deepEqual(jsonLd(boardHtml), []);
+assert.match(boardHtml, /Central City Mall food court, 10153 King George Blvd, Surrey/);
+assert.match(boardHtml, /RSVP on Meetup/);
+assert.match(boardHtml, /<p class="pill">Free<\/p>/);
+
+function assertNoBoardSchedule(html, label) {
+  assert.ok(html, `${label}: board game content exists`);
+  assert.doesNotMatch(
+    html,
+    /\b(?:mon|tues|wednes|thurs|fri|satur|sun)days?\b|\bweekly\b|\bevery week\b|\beach week\b|\b6:30\b|\b18:30\b|eventSchedule|startDate|endDate/i,
+    label,
+  );
+  assert.doesNotMatch(
+    html,
+    /undefined|<(?:p|span) class="(?:event__when|day__name|event-link__day|event-link__time|links-eyebrow|event-index__meta)"><\/(?:p|span)>|(?:>|^)\s*[·/]|[·/]\s*(?:<|$)/,
+    label,
+  );
+}
+assertNoBoardSchedule(
+  boardHtml.match(/<main>[\s\S]*?<\/main>/)?.[0].replace(/<nav class="related"[\s\S]*?<\/nav>/, ''),
+  'board game page',
+);
+const homeBoardHtml = ssr.render('/').html;
+assertNoBoardSchedule(
+  homeBoardHtml.match(/<article\b[^>]*id="boardgames"[\s\S]*?<\/article>/)?.[0],
+  'home board game card',
+);
+assertNoBoardSchedule(
+  homeBoardHtml.match(/<a\b[^>]*class="day day--pink"[\s\S]*?<\/a>/)?.[0],
+  'home board game strip',
+);
+assertNoBoardSchedule(
+  links.match(/<a class="event-link event-link--pink"[\s\S]*?<\/a>/)?.[0],
+  'links board game card',
+);
+for (const item of links.matchAll(/<span class="links-marquee__item">[\s\S]*?<\/span>/g)) {
+  if (item[0].includes('Board Game Night')) assertNoBoardSchedule(item[0], 'links board game marquee');
+}
+const eventsHtml = readFileSync(join(root, 'dist/_pages/events.html'), 'utf8');
+const eventsList = jsonLd(eventsHtml).find((block) => block['@type'] === 'ItemList');
+const boardListItem = eventsList.itemListElement.find((entry) => entry.url.endsWith('/board-game-night-surrey'));
+assert.equal(boardListItem.item['@type'], 'WebPage');
+assertNoBoardSchedule(JSON.stringify(boardListItem), 'board game list JSON-LD');
+assertNoBoardSchedule(
+  eventsHtml.match(/<a href="\/board-game-night-surrey">[\s\S]*?<\/a>/)?.[0],
+  'events board game card',
+);
 assert.equal(jsonLd(whitecapsHtml)[0].startDate, '2026-11-07T14:00:00-07:00');
 assert.equal(jsonLd(whitecapsHtml)[0].endDate, undefined);
 
@@ -312,12 +358,16 @@ const meetupsHtml = readFileSync(join(root, 'dist/_pages/meetups-in-surrey.html'
 assert.equal(h1Text(meetupsHtml, '/meetups-in-surrey'), 'Meetups in Surrey');
 assert.match(
   meetupsHtml,
-  /<title>Meetups in Surrey BC \| Free Weekly Social Events \| f8 Social Club<\/title>/,
+  /<title>Meetups in Surrey BC \| Free Social Events \| f8 Social Club<\/title>/,
 );
 assert.equal(meetupsHtml.includes('posthog'), false);
 assert.equal(meetupsHtml.includes('best meetups in Surrey'), false);
 assert.equal(meetupsHtml.includes('Meetup groups in Surrey'), false);
 assert.equal(meetupsHtml.includes('Looking for Meetup groups'), false);
+assertNoBoardSchedule(
+  meetupsHtml.match(/<h2 class="script">Board games<\/h2>[\s\S]*?(?=<h2)/)?.[0],
+  'meetups board game section',
+);
 assert.match(meetupsHtml, /href="\/coworking-surrey"/);
 assert.match(meetupsHtml, /href="\/board-game-night-surrey"/);
 assert.match(meetupsHtml, /href="\/events"/);
