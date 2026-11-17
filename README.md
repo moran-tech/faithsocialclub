@@ -23,8 +23,8 @@ npm run build      # type-check + production build into dist/
 
 `https://f8social.club/links` is a separate, mobile-first page for the Instagram bio.
 Its HTML entry is `links/index.html`, with React and isolated styles in `src/links/`.
-It reads `EVENTS` from `src/config.ts` and adds one-off events in
-`src/links/events.ts`, without changing the homepage's event copy. It reuses
+It lists dated upcoming Meetup events from `src/links/events.ts`, without
+changing the homepage's event copy in `src/config.ts`. It reuses
 `NewsletterForm`, including the same `VITE_SUBSCRIBE_API_URL` build setting as the
 homepage.
 

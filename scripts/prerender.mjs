@@ -138,6 +138,18 @@ if (linksBody.preloads.length > 0) {
 }
 links = links.replace('<div id="root"></div>', `<div id="root">${linksBody.html}</div>`);
 if (!links.includes('posthog.init')) throw new Error('/links prerender removed PostHog');
+assert.match(links, /Bowling Night/);
+assert.match(links, /317448447/);
+assert.match(links, /Surrey Coworking/);
+assert.match(links, /317120927/);
+assert.match(links, /Girls(?:'|&#x27;|&apos;) Brunch \(women only\)/);
+assert.match(links, /317464950/);
+assert.match(links, /317120929/);
+assert.match(links, /Casual Dinner/);
+assert.match(links, /317465147/);
+assert.equal(links.includes('317166913'), false);
+assert.equal(links.includes('Whitecaps Watch Party'), false);
+assert.equal(links.includes('317095315'), false);
 h1Text(links, '/links');
 assert.equal(links.includes('faithsocialclub.com'), false);
 assert.equal(links.includes('<div id="root"></div>'), false);
@@ -233,10 +245,10 @@ assertNoBoardSchedule(
   homeBoardHtml.match(/<a\b[^>]*class="day day--pink"[\s\S]*?<\/a>/)?.[0],
   'home board game strip',
 );
-assertNoBoardSchedule(
-  links.match(/<a class="event-link event-link--pink"[\s\S]*?<\/a>/)?.[0],
-  'links board game card',
-);
+const linksBoardCard = links.match(/<a class="event-link[^"]*"[^>]*>[\s\S]*?Board Game Night[\s\S]*?<\/a>/)?.[0];
+if (linksBoardCard) {
+  assertNoBoardSchedule(linksBoardCard, 'links board game card');
+}
 for (const item of links.matchAll(/<span class="links-marquee__item">[\s\S]*?<\/span>/g)) {
   if (item[0].includes('Board Game Night')) assertNoBoardSchedule(item[0], 'links board game marquee');
 }
@@ -414,8 +426,6 @@ const forbiddenCopy = [
   /early bird/i,
   /317095315/,
   /dj aj/i,
-  /december 5/i,
-  /\bdec 5\b/i,
   /\$35\b/,
   /\$45\b/,
   /mixer-feature/,
