@@ -27,6 +27,16 @@ export const LINKS_EVENTS: LinksEvent[] = [
     tagline: 'Full - join the waitlist',
     location: 'The Zone Bowling Centre, Coquitlam',
     url: 'https://www.meetup.com/coworking-surrey-hosted-by-morantech/events/317448447/',
+    // Photo: Engin Akyurt, https://unsplash.com/photos/a-bowling-ball-on-a-bowling-alley-YxiW_hx3lyA
+    photos: [
+      {
+        src: '/images/links-bowling-night.webp',
+        alt: 'A green bowling ball on a wooden lane, with pins standing at the far end of the alley',
+        width: 800,
+        height: 600,
+        orientation: 'landscape',
+      },
+    ],
     accent: 'peach',
   },
   {
@@ -50,6 +60,16 @@ export const LINKS_EVENTS: LinksEvent[] = [
     tagline: 'Brunch and good company',
     location: "Maxine's Cafe & Bar, Downtown Vancouver",
     url: 'https://www.meetup.com/coworking-surrey-hosted-by-morantech/events/317464950/',
+    // Photo: Say S. (@iamsay), https://unsplash.com/photos/a-table-topped-with-lots-of-plates-of-food-4h9Ffh6aawI
+    photos: [
+      {
+        src: '/images/links-girls-brunch.webp',
+        alt: 'An overhead view of a café brunch table with French toast, eggs, salad, a sandwich, pastries, and coffee',
+        width: 800,
+        height: 571,
+        orientation: 'landscape',
+      },
+    ],
     accent: 'pink',
   },
   {
@@ -73,6 +93,16 @@ export const LINKS_EVENTS: LinksEvent[] = [
     tagline: 'Dinner and good company',
     location: 'Brewhall, Olympic Village, Vancouver',
     url: 'https://www.meetup.com/coworking-surrey-hosted-by-morantech/events/317465147/',
+    // Photo: Klara Kulikova (@kkalerry), https://unsplash.com/photos/WcV2YkM3Dls
+    photos: [
+      {
+        src: '/images/links-casual-dinner.webp',
+        alt: 'Friends reaching in to share a pizza at a restaurant table, with empty plates around the board',
+        width: 800,
+        height: 533,
+        orientation: 'landscape',
+      },
+    ],
     accent: 'peach',
   },
 ];
