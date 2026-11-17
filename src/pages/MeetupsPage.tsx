@@ -13,7 +13,7 @@ export function MeetupsPage() {
         </nav>
         <p className="eyebrow">Surrey, BC · Professionals</p>
         <h1 className="script">{meetups.h1}</h1>
-        <p className="pill">Free weekly</p>
+        <p className="pill">Free</p>
         <p className="lead">{meetups.description}</p>
         <div className="hero__actions">
           <Rsvp href={MEETUP_URL} label="RSVP on Meetup" />
@@ -24,10 +24,10 @@ export function MeetupsPage() {
       </section>
 
       <section className="meetup-copy">
-        <h2 className="script">Weekly meetups in Surrey</h2>
+        <h2 className="script">Meetups in Surrey</h2>
         <p>
           If you want the current meetups in Surrey for professionals, start with the two nights we host.
-          These Surrey meetups are free, they start at 6:30 PM, and the same people tend to come back.
+          These Surrey meetups are free, and the same people tend to come back. Monday coworking starts at 6:30 PM.
           Meetup.com is where you RSVP, and it is also where other groups list their events. We are one
           social club, not a directory of every meetup in the city.
         </p>
@@ -54,10 +54,9 @@ export function MeetupsPage() {
           </a>
         </div>
 
-        <h2 className="script">Thursday board games</h2>
+        <h2 className="script">Board games</h2>
         <Facts
           items={[
-            { term: 'When', detail: `Every Thursday, ${board.time}` },
             { term: 'Price', detail: 'Free' },
             {
               term: 'Where',
@@ -67,7 +66,7 @@ export function MeetupsPage() {
         />
         <p>No experience needed. We explain the rules first. Come solo or bring a friend. Most people come solo.</p>
         <div className="hero__actions">
-          <Rsvp href={board.rsvp} label="RSVP for Thursday" />
+          <Rsvp href={board.rsvp} label="RSVP on Meetup" />
           <a className="btn btn--ghost" href={board.path}>
             Board game details
           </a>
@@ -99,7 +98,7 @@ export function MeetupsPage() {
           links={[
             { href: '/', label: 'Home' },
             { href: coworking.path, label: 'Monday coworking' },
-            { href: board.path, label: 'Thursday board game night' },
+            { href: board.path, label: 'Board game night' },
             { href: eventsPage.path, label: 'Surrey events this month' },
           ]}
         />

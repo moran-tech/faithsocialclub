@@ -1,4 +1,4 @@
-import { datedEvents, eventsPage, meetups, weeklySeries } from '../seo.ts';
+import { datedEvents, eventsPage, meetups, eventSeries } from '../seo.ts';
 
 export function EventsPage() {
   return (
@@ -13,17 +13,17 @@ export function EventsPage() {
         <h1 className="script">{eventsPage.h1}</h1>
         <p className="lead">{eventsPage.description}</p>
         <p>
-          <a href={meetups.path}>Meetups in Surrey</a> repeat every week: coworking on Monday and board games
-          on Thursday. One-off events are listed with their dates.
+          <a href={meetups.path}>Meetups in Surrey</a> include weekly coworking on Monday and board game
+          night. One-off events are listed with their dates.
         </p>
       </section>
       <section>
-        <h2 className="script">Every week</h2>
+        <h2 className="script">Our meetups</h2>
         <ul className="event-index">
-          {weeklySeries.map((event) => (
+          {eventSeries.map((event) => (
             <li key={event.path}>
               <a href={event.path}>
-                <span className="event-index__meta">{event.schedule}</span>
+                {event.schedule && <span className="event-index__meta">{event.schedule}</span>}
                 <span className="event-index__title">{event.h1}</span>
                 <span className="event-index__meta">{event.price}</span>
                 <span className="event-index__venue">{event.venueLine}</span>

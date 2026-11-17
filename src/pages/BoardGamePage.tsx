@@ -5,7 +5,7 @@ export function BoardGamePage() {
   return (
     <main>
       <section className="page-intro">
-        <p className="eyebrow">Surrey, BC · {board.schedule}</p>
+        <p className="eyebrow">Surrey, BC</p>
         <h1 className="script">{board.h1}</h1>
         <p className="pill">Free</p>
         <p className="lead">{board.description}</p>
@@ -18,10 +18,9 @@ export function BoardGamePage() {
       </section>
 
       <section>
-        <h2 className="script">Every Thursday</h2>
+        <h2 className="script">Board Game Night</h2>
         <Facts
           items={[
-            { term: 'When', detail: board.schedule },
             { term: 'Price', detail: 'Free' },
             {
               term: 'Where',

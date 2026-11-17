@@ -59,7 +59,7 @@ export function CoworkingPage() {
         <Related
           links={[
             { href: meetups.path, label: 'Meetups in Surrey' },
-            { href: board.path, label: 'Thursday board game night' },
+            { href: board.path, label: 'Board game night' },
             { href: eventsPage.path, label: 'Surrey events this month' },
           ]}
         />

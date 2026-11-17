@@ -13,7 +13,7 @@ export type LinksEvent = Pick<
   artwork?: EventArtwork;
 };
 
-// One-off event details stay on /links, separate from the homepage's weekly plans.
+// One-off event details stay on /links, separate from the homepage's meetups.
 export const LINKS_EVENTS: LinksEvent[] = [
   {
     id: 'bowling-night',

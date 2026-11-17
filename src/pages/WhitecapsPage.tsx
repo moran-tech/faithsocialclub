@@ -45,7 +45,7 @@ export function WhitecapsPage() {
           links={[
             { href: eventsPage.path, label: 'Surrey events this month' },
             { href: coworking.path, label: 'Monday coworking' },
-            { href: board.path, label: 'Thursday board game night' },
+            { href: board.path, label: 'Board game night' },
           ]}
         />
       </section>

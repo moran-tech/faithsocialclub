@@ -31,7 +31,7 @@ function entranceStyle(index: number): CSSProperties {
 function EventLink({ event, index }: { event: LinksEvent; index: number }) {
   const photo = event.photos?.[0];
   const image = photo?.src ?? event.image;
-  const dayLabel = event.date ?? `Every ${event.day}`;
+  const dayLabel = event.date ?? (event.day ? `Every ${event.day}` : undefined);
 
   return (
     <li className="links-reveal" style={entranceStyle(index)}>
@@ -50,18 +50,18 @@ function EventLink({ event, index }: { event: LinksEvent; index: number }) {
                 decoding="async"
               />
             )}
-            {event.id !== 'boardgames' && <span className="event-link__day">{dayLabel}</span>}
+            {dayLabel && <span className="event-link__day">{dayLabel}</span>}
             {event.sticker && <span className="event-link__sticker">{event.sticker}</span>}
           </div>
         )}
         <div className="event-link__body">
-          {!image && !event.artwork && <p className="links-eyebrow">{dayLabel}</p>}
+          {!image && !event.artwork && dayLabel && <p className="links-eyebrow">{dayLabel}</p>}
           <h3>{event.title}</h3>
           <p className="event-link__tagline">{event.tagline}</p>
           {event.location && <p className="event-link__location">{event.location}</p>}
           <div className="event-link__bottom">
             <span>
-              <span className="event-link__time">{event.time}</span>
+              {event.time && <span className="event-link__time">{event.time}</span>}
               <span className="event-link__cta">RSVP on Meetup</span>
             </span>
             <Arrow />
@@ -127,7 +127,7 @@ export default function LinksPage() {
           </div>
 
           <div className="links-intro">
-            <p className="links-eyebrow">{CITY} · Good people, every week</p>
+            <p className="links-eyebrow">{CITY} · Good people</p>
             <h1>
               Make friends<br /><span>outside work.</span>
             </h1>
@@ -144,7 +144,7 @@ export default function LinksPage() {
                 {marqueeItems.map((event) => (
                   <span className="links-marquee__item" key={event.id}>
                     <Spark />
-                    {event.date ?? event.day} / {event.title}
+                    {(event.date ?? event.day) && <>{event.date ?? event.day} / </>}{event.title}
                   </span>
                 ))}
               </span>

@@ -37,7 +37,7 @@ function EventCard({ event, details }: { event: ClubEvent; details: EventPage })
     <article className={`event event--${event.accent}`} id={event.id}>
       <EventMedia event={event} />
       <div className="event__body">
-        <p className="event__when">{details.schedule}</p>
+        {details.schedule && <p className="event__when">{details.schedule}</p>}
         <h3 className="script event__title">{event.title}</h3>
         <p className="pill">Free</p>
         <p className="event__tagline">{event.tagline}</p>
@@ -51,7 +51,7 @@ function EventCard({ event, details }: { event: ClubEvent; details: EventPage })
           ))}
         </ul>
         <div className="hero__actions">
-          <Rsvp href={details.rsvp} label={`RSVP for ${event.day}`} />
+          <Rsvp href={details.rsvp} label={event.day ? `RSVP for ${event.day}` : 'RSVP on Meetup'} />
           <a className="btn btn--ghost" href={details.path}>
             Details
           </a>
@@ -96,13 +96,13 @@ export function HomePage() {
           </h1>
           <p className="lead">
             <a href="/meetups-in-surrey">Meetups in Surrey</a> for professionals who want friends outside work.
-            Free coworking on Mondays, free board games on Thursdays, and good people every week.
+            Free coworking on Mondays, free board games, and good people.
           </p>
           <MeetupRating />
           <div className="hero__actions">
             <Rsvp href={MEETUP_URL} label="Join us on Meetup" />
             <a className="btn btn--ghost" href="#events">
-              See the week
+              See the events
             </a>
           </div>
         </div>
@@ -116,15 +116,15 @@ export function HomePage() {
       </section>
 
       <section className="week" id="events">
-        <h2 className="script">This week at Social Club</h2>
+        <h2 className="script">At Social Club</h2>
         <div className="week__strip">
           {EVENTS.map((event) => {
             const details = seriesById[event.id as keyof typeof seriesById];
             return (
               <a key={event.id} className={`day day--${event.accent}`} href={details.path}>
-                <span className="day__name">{event.day}</span>
+                {event.day && <span className="day__name">{event.day}</span>}
                 <span className="day__title">{event.title}</span>
-                <span className="day__time">{event.time} · Free</span>
+                <span className="day__time">{event.time ? `${event.time} · Free` : 'Free'}</span>
               </a>
             );
           })}
@@ -159,7 +159,7 @@ export function HomePage() {
           <div className="about__item">
             <span className="dot dot--peach" />
             <h3>Real friends</h3>
-            <p>Same faces every week means conversations that go somewhere.</p>
+            <p>Familiar faces mean conversations that go somewhere.</p>
           </div>
         </div>
         <p className="section-link">
